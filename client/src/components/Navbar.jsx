@@ -1,14 +1,18 @@
-﻿import { Link, NavLink } from "react-router-dom";
+﻿import { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
     const { isAuthenticated, logout, user } = useAuth();
+    const [open, setOpen] = useState(false);
+
+    const close = () => setOpen(false);
 
     return (
-        <header className="nav-shell">
+        <header className={`nav-shell ${open ? "nav-open" : ""}`}>
             <nav className="container nav">
-                <Link to="/" className="brand">
+                <Link to="/" className="brand" onClick={close}>
                     <img
                         src="/logo.png"
                         alt="Charity"
@@ -17,7 +21,17 @@ export default function Navbar() {
                     CHARITY
                 </Link>
 
-                <div className="nav-links">
+                <button
+                    aria-label={open ? "Close menu" : "Open menu"}
+                    className="nav-toggle"
+                    onClick={() => setOpen((v) => !v)}
+                >
+                    <span className="bar" aria-hidden="true" />
+                    <span className="bar" aria-hidden="true" />
+                    <span className="bar" aria-hidden="true" />
+                </button>
+
+                <div className="nav-links" onClick={close}>
                     <NavLink to="/" end>
                         <i className="ph ph-house"></i> Home
                     </NavLink>
@@ -45,7 +59,7 @@ export default function Navbar() {
                     )}
                 </div>
 
-                <div className="nav-auth">
+                <div className="nav-auth" onClick={close}>
                     {isAuthenticated ? (
                         <>
                             <span className="user-chip">
