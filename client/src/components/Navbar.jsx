@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
@@ -6,11 +6,34 @@ import { useAuth } from "../context/AuthContext";
 export default function Navbar() {
     const { isAuthenticated, logout, user } = useAuth();
     const [open, setOpen] = useState(false);
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem("theme") || "dark";
+    });
+
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+    };
+
     const menuRef = useRef(null);
     const toggleRef = useRef(null);
     const prevFocusRef = useRef(null);
 
     const close = () => setOpen(false);
+
+    useEffect(() => {
+        function handleResize() {
+            if (window.innerWidth > 900) {
+                setOpen(false);
+            }
+        }
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     useEffect(() => {
         if (!open) return;
@@ -49,27 +72,37 @@ export default function Navbar() {
 
     return (
         <header className={`nav-shell ${open ? "nav-open" : ""}`}>
-            <nav className="container nav">
+            <nav className="nav">
                 <Link to="/" className="brand" onClick={close}>
                     <img
                         src="/logo.png"
                         alt="Charity"
                         style={{ width: 36, height: 36, objectFit: "contain", borderRadius: 8, background: "rgba(255,255,255,0.03)", padding: 4 }}
                     />
-                    CHARITY
+                    <span className="brand-text">CHARITY</span>
                 </Link>
 
-                <button
-                    ref={toggleRef}
-                    aria-label={open ? "Close menu" : "Open menu"}
-                    aria-expanded={open}
-                    className="nav-toggle"
-                    onClick={() => setOpen((v) => !v)}
-                >
-                    <span className="bar" aria-hidden="true" />
-                    <span className="bar" aria-hidden="true" />
-                    <span className="bar" aria-hidden="true" />
-                </button>
+                <div className="nav-controls">
+                    <button
+                        onClick={toggleTheme}
+                        className="theme-toggle mobile-only"
+                        title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                    >
+                        <i className={`ph ${theme === "dark" ? "ph-sun" : "ph-moon"}`}></i>
+                    </button>
+
+                    <button
+                        ref={toggleRef}
+                        aria-label={open ? "Close menu" : "Open menu"}
+                        aria-expanded={open}
+                        className="nav-toggle"
+                        onClick={() => setOpen((v) => !v)}
+                    >
+                        <span className="bar" aria-hidden="true" />
+                        <span className="bar" aria-hidden="true" />
+                        <span className="bar" aria-hidden="true" />
+                    </button>
+                </div>
 
                 <div className="menu-wrap" ref={menuRef}>
                     <div className="nav-links" onClick={close}>
@@ -101,6 +134,16 @@ export default function Navbar() {
                     </div>
 
                     <div className="nav-auth" onClick={close}>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            toggleTheme();
+                        }}
+                        className="theme-toggle desktop-only"
+                        title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                    >
+                        <i className={`ph ${theme === "dark" ? "ph-sun" : "ph-moon"}`}></i>
+                    </button>
                     {isAuthenticated ? (
                         <>
                             <span className="user-chip">

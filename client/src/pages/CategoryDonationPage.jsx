@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { requestApi, uploadApi } from "../api/client";
@@ -139,7 +139,7 @@ export default function CategoryDonationPage() {
                         />
                     </label>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div className="responsive-grid-2">
                         <label>
                             Quantity
                             <div style={{ position: "relative" }}>
