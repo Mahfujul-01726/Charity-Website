@@ -1,0 +1,154 @@
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+const getAuthHeaders = () => {
+    const token = localStorage.getItem("charity_token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+export const apiRequest = async (endpoint, options = {}) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            ...getAuthHeaders(),
+            ...(options.headers || {}),
+        },
+        ...options,
+    };
+
+    const response = await fetch(`${API_URL}${endpoint}`, config);
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Request failed");
+    }
+
+    return data;
+};
+
+export const authApi = {
+    register: (payload) =>
+        apiRequest("/auth/register", {
+            method: "POST",
+            body: JSON.stringify(payload),
+        }),
+    login: (payload) =>
+        apiRequest("/auth/login", {
+            method: "POST",
+            body: JSON.stringify(payload),
+        }),
+    me: () => apiRequest("/auth/me"),
+    updateProfile: (payload) =>
+        apiRequest("/auth/profile", {
+            method: "PUT",
+            body: JSON.stringify(payload),
+        }),
+};
+
+const MOCK_CAMPAIGNS = [
+    {
+        _id: "mock1",
+        title: "Emergency Medical Relief Fund",
+        description: "Provide immediate medical assistance and supplies to under-resourced hospitals in developing nations. Your donation helps purchase life-saving equipment, medicines, and funds emergency surgeries for those who cannot afford them.",
+        goalAmount: 50000,
+        raisedAmount: 32500,
+        category: "Medical",
+        imageUrl: "https://images.unsplash.com/photo-1516549655169-df83a0774514?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+        status: "active",
+        createdAt: new Date().toISOString()
+    },
+    {
+        _id: "mock2",
+        title: "Tech Education for Underprivileged Youth",
+        description: "Empower the next generation by providing laptops, internet access, and coding bootcamps to students from low-income families. Education is the key to breaking the cycle of poverty.",
+        goalAmount: 25000,
+        raisedAmount: 8400,
+        category: "Education",
+        imageUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+        status: "active",
+        createdAt: new Date().toISOString()
+    },
+    {
+        _id: "mock3",
+        title: "Global Hunger Eradication Project",
+        description: "Join us in our mission to provide nutritious meals to families facing food insecurity. We partner with local farmers and food banks to distribute fresh produce and staple foods to communities in crisis.",
+        goalAmount: 100000,
+        raisedAmount: 76000,
+        category: "Food",
+        imageUrl: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+        status: "active",
+        createdAt: new Date().toISOString()
+    },
+    {
+        _id: "mock4",
+        title: "Earthquake Disaster Relief Operations",
+        description: "Immediate disaster relief for regions struck by recent devastating earthquakes. Funds will go directly towards temporary housing, clean water, blankets, and essential survival kits.",
+        goalAmount: 200000,
+        raisedAmount: 145000,
+        category: "Disaster",
+        imageUrl: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+        status: "active",
+        createdAt: new Date().toISOString()
+    }
+];
+
+export const campaignApi = {
+    list: async () => {
+        // Return local mock campaigns directly without backend
+        return new Promise((resolve) => setTimeout(() => resolve(MOCK_CAMPAIGNS), 500));
+    },
+    getById: async (id) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const campaign = MOCK_CAMPAIGNS.find(c => c._id === id);
+                if (campaign) resolve(campaign);
+                else reject(new Error("Campaign not found"));
+            }, 500);
+        });
+    },
+    create: async (payload) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const newCampaign = {
+                    _id: `mock${Date.now()}`,
+                    ...payload,
+                    raisedAmount: 0,
+                    status: "active",
+                    createdAt: new Date().toISOString()
+                };
+                MOCK_CAMPAIGNS.push(newCampaign);
+                resolve(newCampaign);
+            }, 500);
+        });
+    },
+};
+
+export const donationApi = {
+    create: async (payload) => {
+        return new Promise((resolve) => setTimeout(() => resolve({ ...payload, _id: `mock_don_${Date.now()}` }), 500));
+    },
+    mine: async () => {
+        return new Promise((resolve) => setTimeout(() => resolve([]), 500));
+    },
+};
+
+export const requestApi = {
+    list: async () => {
+        return new Promise((resolve) => setTimeout(() => resolve([]), 500));
+    },
+    mine: async () => {
+        return new Promise((resolve) => setTimeout(() => resolve([]), 500));
+    },
+    create: async (payload) => {
+        return new Promise((resolve) => setTimeout(() => resolve({ ...payload, _id: `mock_req_${Date.now()}` }), 500));
+    },
+};
+
+export const uploadApi = {
+    uploadImage: async (file) => {
+        return new Promise((resolve) => {
+            // Mock file upload by creating a local blob URL
+            const url = URL.createObjectURL(file);
+            setTimeout(() => resolve(url), 800);
+        });
+    },
+};

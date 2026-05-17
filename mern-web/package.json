@@ -1,0 +1,17 @@
+{
+    "name": "charity-mern",
+    "private": true,
+    "version": "1.0.0",
+    "description": "Full MERN charity web application",
+    "scripts": {
+        "install:all": "npm install --prefix server && npm install --prefix client",
+        "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+        "dev:server": "npm run dev --prefix server",
+        "dev:client": "npm run dev --prefix client",
+        "seed": "npm run seed --prefix server"
+    },
+    "devDependencies": {
+        "concurrently": "^9.0.1",
+        "eslint": "^8.56.0"
+    }
+}
