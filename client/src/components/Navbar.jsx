@@ -9,7 +9,12 @@ export default function Navbar() {
         <header className="nav-shell">
             <nav className="container nav">
                 <Link to="/" className="brand">
-                    <i className="ph-fill ph-heart-beat"></i> CHARITY
+                    <img
+                        src="/logo.png"
+                        alt="Charity"
+                        style={{ width: 36, height: 36, objectFit: "contain", borderRadius: 8, background: "rgba(255,255,255,0.03)", padding: 4 }}
+                    />
+                    CHARITY
                 </Link>
 
                 <div className="nav-links">
