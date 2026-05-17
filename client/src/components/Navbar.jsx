@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 export default function Navbar() {
     const { isAuthenticated, logout, user } = useAuth();
     const [open, setOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const [theme, setTheme] = useState(() => {
         return localStorage.getItem("theme") || "dark";
     });
@@ -31,8 +32,19 @@ export default function Navbar() {
                 setOpen(false);
             }
         }
+        function handleScroll() {
+            if (window.scrollY > 20) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        }
         window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("scroll", handleScroll);
+        };
     }, []);
 
     useEffect(() => {
@@ -71,7 +83,7 @@ export default function Navbar() {
     }, [open]);
 
     return (
-        <header className={`nav-shell ${open ? "nav-open" : ""}`}>
+        <header className={`nav-shell ${open ? "nav-open" : ""} ${scrolled ? "nav-scrolled" : ""}`}>
             <nav className="nav">
                 <Link to="/" className="brand" onClick={close}>
                     <img
