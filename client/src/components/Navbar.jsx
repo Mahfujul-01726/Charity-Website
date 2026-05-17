@@ -120,6 +120,7 @@ export default function Navbar() {
                             </Link>
                         </>
                     )}
+                    </div>
                 </div>
             </nav>
         </header>
