@@ -100,3 +100,28 @@ Health endpoint:
 
 - Donations in this starter are recorded as successful test transactions.
 - You can later integrate Stripe, SSLCommerz, or any payment gateway.
+
+## Development & CI
+
+- **Run locally:**
+
+```bash
+npm install
+npm run install:all
+npm run dev
+```
+
+- **Build client for production:**
+
+```bash
+npm run build --prefix client
+```
+
+- **CI:** A simple GitHub Actions workflow (`.github/workflows/ci.yml`) installs dependencies and builds the client on push/PR to `main`.
+
+## Repository Notes
+
+- A backup of the original pre-clean history is preserved in the branch `backup/pre-clean-main`.
+- The project was reorganized: `client/` and `server/` live at repository root for clarity.
+- If you still see a leftover `mern-web/` wrapper folder, it can be safely removed; close any running Node/Vite/VSCode processes and delete the folder.
+
