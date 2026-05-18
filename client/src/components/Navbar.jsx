@@ -87,7 +87,7 @@ export default function Navbar() {
             <nav className="nav">
                 <Link to="/" className="brand" onClick={close}>
                     <img
-                        src="/logo.png"
+                        src={`${import.meta.env.BASE_URL}logo.png`}
                         alt="Charity"
                         style={{ width: 36, height: 36, objectFit: "contain", borderRadius: 8, background: "rgba(255,255,255,0.03)", padding: 4 }}
                     />
