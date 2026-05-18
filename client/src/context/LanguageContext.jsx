@@ -59,6 +59,9 @@ const translations = {
         raised_of: "Raised ${raised} of ${goal}",
         view_campaign: "View Campaign",
         donation_categories: "Donation Categories",
+        stats_donations: "Donations Made",
+        stats_impacted: "People Impacted",
+        stats_volunteers: "Volunteer Hours",
         
         // Categories & Subtitles
         cat_blood: "Blood",
@@ -83,6 +86,10 @@ const translations = {
         cat_furniture_sub: "Home Comfort",
         cat_environment: "Environment",
         cat_environment_sub: "Plant Trees",
+        cat_emergency: "Emergency",
+        cat_emergency_sub: "SOS 505",
+        cat_requests: "Requests",
+        cat_requests_sub: "Recent Needs",
 
         // Buttons & Forms
         submit: "Submit",
@@ -364,6 +371,9 @@ const translations = {
         raised_of: "${goal} এর মধ্যে ${raised} সংগৃহীত",
         view_campaign: "ক্যাম্পেইন দেখুন",
         donation_categories: "অনুদানের ক্যাটাগরি",
+        stats_donations: "কৃত অনুদান",
+        stats_impacted: "প্রভাবিত মানুষ",
+        stats_volunteers: "স্বেচ্ছাসেবীর সময়",
         
         // Categories & Subtitles
         cat_blood: "রক্ত",
@@ -388,6 +398,10 @@ const translations = {
         cat_furniture_sub: "ঘরের আরামদায়কতা",
         cat_environment: "পরিবেশ",
         cat_environment_sub: "গাছ লাগান",
+        cat_emergency: "জরুরী অবস্থা",
+        cat_emergency_sub: "এসওএস ৫০৫",
+        cat_requests: "অনুরোধ",
+        cat_requests_sub: "সাম্প্রতিক প্রয়োজন",
 
         // Buttons & Forms
         submit: "জমা দিন",

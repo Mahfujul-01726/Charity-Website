@@ -11,7 +11,9 @@ const getIconForCategory = (slug) => {
         'food': 'ph-bowl-food',
         'disaster': 'ph-house-line',
         'orphanage': 'ph-baby',
-        'ngo': 'ph-buildings'
+        'ngo': 'ph-buildings',
+        'emergency': 'ph-ambulance',
+        'requests': 'ph-clipboard-text'
     };
     return icons[slug] || 'ph-heart';
 };
@@ -51,6 +53,26 @@ export default function HomePage() {
                         <Link className="btn btn-outline" to="/request">
                             <i className="ph ph-plus-circle"></i> {t("create_request")}
                         </Link>
+                    </div>
+                </div>
+            </section>
+
+            <section className="container section">
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
+                    <div className="card" style={{ flex: '1', minWidth: '200px', textAlign: 'center', padding: '30px' }}>
+                        <i className="ph ph-hand-heart" style={{ fontSize: '3rem', color: '#8B5CF6' }}></i>
+                        <h2 style={{ fontSize: '2.5rem', margin: '10px 0' }}>12K+</h2>
+                        <p className="meta-text">{t("stats_donations") || "Donations Made"}</p>
+                    </div>
+                    <div className="card" style={{ flex: '1', minWidth: '200px', textAlign: 'center', padding: '30px' }}>
+                        <i className="ph ph-users" style={{ fontSize: '3rem', color: '#06B6D4' }}></i>
+                        <h2 style={{ fontSize: '2.5rem', margin: '10px 0' }}>35K+</h2>
+                        <p className="meta-text">{t("stats_impacted") || "People Impacted"}</p>
+                    </div>
+                    <div className="card" style={{ flex: '1', minWidth: '200px', textAlign: 'center', padding: '30px' }}>
+                        <i className="ph ph-clock" style={{ fontSize: '3rem', color: '#EC4899' }}></i>
+                        <h2 style={{ fontSize: '2.5rem', margin: '10px 0' }}>48K+</h2>
+                        <p className="meta-text">{t("stats_volunteers") || "Volunteer Hours"}</p>
                     </div>
                 </div>
             </section>
@@ -104,7 +126,7 @@ export default function HomePage() {
                     </Link>
                 </div>
                 <div className="category-grid">
-                    {donationCategories.slice(0, 6).map((item) => (
+                    {donationCategories.slice(0, 8).map((item) => (
                         <Link
                             to={item.slug === "ngo" ? "/ngo-locator" : `/donate/${item.slug}`}
                             key={item.slug}
