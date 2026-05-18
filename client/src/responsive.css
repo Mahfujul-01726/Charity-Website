@@ -48,13 +48,46 @@
     transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Global Card & Grid Responsive Resiliency */
-.card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)) !important;
+/* Global Card & Grid Responsive Resiliency - Strict Symmetry Layouts */
+/* Desktop layouts (from 992px up) */
+@media (min-width: 992px) {
+    .card-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+    .category-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
 }
 
-.category-grid {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)) !important;
+/* Tablet layouts (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .category-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* Small screen layouts (below 768px) */
+@media (max-width: 767px) {
+    .card-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Mobile-specific category layout (below 600px) */
+@media (max-width: 600px) {
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* Very narrow mobile-specific category layout (below 400px) */
+@media (max-width: 400px) {
+    .category-grid {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 /* Responsive Custom Grids */
@@ -77,7 +110,7 @@
     overflow: hidden;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 991px) {
     .nav-controls {
         display: flex;
     }
