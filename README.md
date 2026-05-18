@@ -532,7 +532,7 @@ gh workflow run deploy-frontend.yml
                                                               
 ```
 
-**Built with ❤ by [flutter_project](mailto:mahfojulemridul@gmail.com)**  
+**Built with ❤ by [MD.MAHFUJUL KARIM SHEIKH](mailto:mahfojulemridul@gmail.com)**  
 *Every line of code is a chance to change a life.*
 
 <br />
