@@ -9,6 +9,7 @@ export default function Navbar() {
     const { language, setLanguage, t } = useTranslation();
     const [open, setOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [scrollProgress, setScrollProgress] = useState(0);
     const [theme, setTheme] = useState(() => {
         return localStorage.getItem("theme") || "dark";
     });
@@ -45,9 +46,18 @@ export default function Navbar() {
             } else {
                 setScrolled(false);
             }
+
+            const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+            if (totalScroll > 0) {
+                const progress = window.scrollY / totalScroll;
+                setScrollProgress(progress);
+            } else {
+                setScrollProgress(0);
+            }
         }
         window.addEventListener("resize", handleResize);
         window.addEventListener("scroll", handleScroll);
+        handleScroll();
         return () => {
             window.removeEventListener("resize", handleResize);
             window.removeEventListener("scroll", handleScroll);
@@ -202,6 +212,9 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav>
+            <div className="nav-scroll-indicator-container">
+                <div className="nav-scroll-indicator" style={{ transform: `scaleX(${scrollProgress})` }} />
+            </div>
         </header>
     );
 }
