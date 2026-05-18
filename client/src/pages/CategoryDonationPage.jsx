@@ -1,15 +1,18 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import { requestApi, uploadApi } from "../api/client";
 import { donationCategories } from "../data/mockData";
+import { useTranslation } from "../context/LanguageContext";
 
 export default function CategoryDonationPage() {
     const { category } = useParams();
+    const { t } = useTranslation();
+    
     const categoryInfo = useMemo(
         () => donationCategories.find((item) => item.slug === category),
         [category]
     );
+
     const [form, setForm] = useState({
         itemName: "",
         description: "",
@@ -23,16 +26,14 @@ export default function CategoryDonationPage() {
     if (!categoryInfo) {
         return (
             <section className="container section">
-                <h2>Category not found</h2>
+                <h2>{t("category_not_found")}</h2>
             </section>
         );
     }
 
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
-        if (!file) {
-            return;
-        }
+        if (!file) return;
 
         try {
             setIsUploading(true);
@@ -40,7 +41,7 @@ export default function CategoryDonationPage() {
             setForm((previous) => ({ ...previous, imageUrl: url }));
         } catch (error) {
             console.error(error);
-            alert("Failed to upload image");
+            alert(t("image_upload_failed"));
         } finally {
             setIsUploading(false);
         }
@@ -51,17 +52,22 @@ export default function CategoryDonationPage() {
 
         try {
             await requestApi.create({
-                title: `Donation Offer: ${form.itemName}`,
-                description: `${form.quantity}x ${form.itemName} - ${form.description} [Image: ${form.imageUrl}]`,
+                title: t("donation_offer_prefix", { item: form.itemName }),
+                description: t("donation_offer_desc", {
+                    quantity: form.quantity,
+                    item: form.itemName,
+                    description: form.description || "N/A",
+                    imageUrl: form.imageUrl || "No Image",
+                }),
                 category: categoryInfo.title,
                 urgency: "Medium",
                 address: form.address || "Contact me",
             });
-            setNotice("Donation request saved successfully. Our team will contact you.");
+            setNotice(t("donation_save_success"));
             setForm({ itemName: "", description: "", quantity: 1, address: "", imageUrl: "" });
         } catch (error) {
             console.error("Donation offer failed", error);
-            alert("Failed to save donation.");
+            alert(t("donation_save_failed"));
         }
     };
 
@@ -92,22 +98,23 @@ export default function CategoryDonationPage() {
                 >
                     <i className="ph ph-hand-heart"></i>
                 </div>
-                <div className="eyebrow">{categoryInfo.title} Donation</div>
-                <h2>{categoryInfo.subtitle}</h2>
+                <div className="eyebrow">
+                    {t("cat_" + categoryInfo.slug)} {t("donation_suffix")}
+                </div>
+                <h2>{t("cat_" + categoryInfo.slug + "_sub")}</h2>
                 <p style={{ color: "var(--text-secondary)", lineHeight: "1.6", maxWidth: "400px" }}>
-                    Fill out the form with your donation details. You can upload an image of the items you
-                    wish to donate.
+                    {t("category_donation_desc")}
                 </p>
             </article>
 
             <article className="glass-card">
                 <h3 style={{ marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px" }}>
-                    <i className="ph ph-package"></i> Item Details
+                    <i className="ph ph-package"></i> {t("item_details_title")}
                 </h3>
 
                 <form className="form-grid" onSubmit={onSubmit}>
                     <label>
-                        Item Name
+                        {t("item_name_label")}
                         <div style={{ position: "relative" }}>
                             <i
                                 className="ph ph-tag"
@@ -123,25 +130,25 @@ export default function CategoryDonationPage() {
                                 value={form.itemName}
                                 onChange={(event) => setForm((previous) => ({ ...previous, itemName: event.target.value }))}
                                 required
-                                placeholder="e.g. Winter Coats"
+                                placeholder={t("item_name_placeholder")}
                                 style={{ paddingLeft: "40px" }}
                             />
                         </div>
                     </label>
 
                     <label>
-                        Description
+                        {t("request_desc_label")}
                         <textarea
                             rows="3"
                             value={form.description}
                             onChange={(event) => setForm((previous) => ({ ...previous, description: event.target.value }))}
-                            placeholder="Condition, size, notes..."
+                            placeholder={t("item_desc_placeholder")}
                         />
                     </label>
 
                     <div className="responsive-grid-2">
                         <label>
-                            Quantity
+                            {t("quantity_label")}
                             <div style={{ position: "relative" }}>
                                 <i
                                     className="ph ph-hash"
@@ -167,7 +174,7 @@ export default function CategoryDonationPage() {
                         </label>
 
                         <label>
-                            Pickup Address
+                            {t("pickup_address_label")}
                             <div style={{ position: "relative" }}>
                                 <i
                                     className="ph ph-map-pin"
@@ -183,7 +190,7 @@ export default function CategoryDonationPage() {
                                     value={form.address}
                                     onChange={(event) => setForm((previous) => ({ ...previous, address: event.target.value }))}
                                     required
-                                    placeholder="City, ZIP"
+                                    placeholder={t("pickup_address_placeholder")}
                                     style={{ paddingLeft: "40px" }}
                                 />
                             </div>
@@ -191,12 +198,12 @@ export default function CategoryDonationPage() {
                     </div>
 
                     <label>
-                        Image Upload
+                        {t("image_upload_label")}
                         <div style={{ display: "flex", gap: "12px" }}>
                             <input type="file" accept="image/*" onChange={handleFileChange} style={{ flex: 1 }} />
                             {isUploading && (
                                 <div style={{ display: "flex", alignItems: "center", color: "var(--cyan)" }}>
-                                    <i className="ph ph-spinner-gap ph-spin"></i> Uploading...
+                                    <i className="ph ph-spinner-gap ph-spin"></i> {t("uploading")}
                                 </div>
                             )}
                         </div>
@@ -222,10 +229,10 @@ export default function CategoryDonationPage() {
 
                     <button className="btn" type="submit" disabled={isUploading} style={{ width: "100%", marginTop: "16px" }}>
                         {isUploading ? (
-                            "Please wait..."
+                            t("please_wait")
                         ) : (
                             <>
-                                <i className="ph ph-paper-plane-right"></i> Submit Donation
+                                <i className="ph ph-paper-plane-right"></i> {t("submit_donation_btn")}
                             </>
                         )}
                     </button>

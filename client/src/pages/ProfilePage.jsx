@@ -1,11 +1,13 @@
-﻿import { useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
 import { authApi, uploadApi } from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "../context/LanguageContext";
 
 export default function ProfilePage() {
     const { user, setUser } = useAuth();
+    const { t } = useTranslation();
+    
     const [form, setForm] = useState({
         name: user?.name || "",
         phone: user?.phone || "",
@@ -17,16 +19,14 @@ export default function ProfilePage() {
 
     const handleAvatarUpload = async (event) => {
         const file = event.target.files[0];
-        if (!file) {
-            return;
-        }
+        if (!file) return;
 
         try {
             const url = await uploadApi.uploadImage(file);
             setForm((previous) => ({ ...previous, avatarUrl: url }));
         } catch (error) {
             console.error(error);
-            alert("Failed to upload avatar");
+            alert(t("avatar_upload_failed"));
         }
     };
 
@@ -38,10 +38,10 @@ export default function ProfilePage() {
             const updatedUser = await authApi.updateProfile(form);
             setUser(updatedUser);
             setIsEditing(false);
-            alert("Profile updated successfully!");
+            alert(t("profile_update_success"));
         } catch (error) {
             console.error(error);
-            alert(error.message || "Failed to update profile.");
+            alert(error.message || t("profile_update_failed"));
         } finally {
             setIsSaving(false);
         }
@@ -50,17 +50,17 @@ export default function ProfilePage() {
     return (
         <section className="container section">
             <article className="glass-card" style={{ marginBottom: "20px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <h2>Profile Details</h2>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <h2>{t("profile_details_title")}</h2>
                     <button className="btn btn-outline" onClick={() => setIsEditing(!isEditing)}>
-                        {isEditing ? "Cancel" : "Edit Profile"}
+                        {isEditing ? t("cancel") : t("edit_profile_btn")}
                     </button>
                 </div>
 
                 {isEditing ? (
                     <form className="form-grid" onSubmit={handleSave} style={{ marginTop: "1rem" }}>
                         <label>
-                            Avatar
+                            {t("avatar_label")}
                             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                                 {form.avatarUrl && (
                                     <img
@@ -74,7 +74,7 @@ export default function ProfilePage() {
                         </label>
 
                         <label>
-                            Name
+                            {t("name")}
                             <input
                                 value={form.name}
                                 onChange={(event) => setForm({ ...form, name: event.target.value })}
@@ -83,7 +83,7 @@ export default function ProfilePage() {
                         </label>
 
                         <label>
-                            Phone
+                            {t("phone_number")}
                             <input
                                 value={form.phone}
                                 onChange={(event) => setForm({ ...form, phone: event.target.value })}
@@ -91,7 +91,7 @@ export default function ProfilePage() {
                         </label>
 
                         <label>
-                            Address
+                            {t("location")}
                             <input
                                 value={form.address}
                                 onChange={(event) => setForm({ ...form, address: event.target.value })}
@@ -99,7 +99,7 @@ export default function ProfilePage() {
                         </label>
 
                         <button className="btn" type="submit" disabled={isSaving}>
-                            {isSaving ? "Saving..." : "Save Changes"}
+                            {isSaving ? t("saving") : t("save_changes")}
                         </button>
                     </form>
                 ) : (
@@ -112,16 +112,16 @@ export default function ProfilePage() {
                             />
                         )}
                         <p>
-                            <strong>Name:</strong> {user?.name}
+                            <strong>{t("name")}:</strong> {user?.name}
                         </p>
                         <p>
-                            <strong>Email:</strong> {user?.email}
+                            <strong>{t("email")}:</strong> {user?.email}
                         </p>
                         <p>
-                            <strong>Phone:</strong> {user?.phone || "Not set"}
+                            <strong>{t("phone_number")}:</strong> {user?.phone || t("not_set")}
                         </p>
                         <p>
-                            <strong>Address:</strong> {user?.address || "Not set"}
+                            <strong>{t("location")}:</strong> {user?.address || t("not_set")}
                         </p>
                         <p>
                             <strong>Role:</strong> {user?.role}
@@ -132,24 +132,24 @@ export default function ProfilePage() {
 
             <div className="category-grid compact">
                 <Link to="/history" className="category-card">
-                    <h4>My Donations</h4>
-                    <p>Track your contribution timeline.</p>
+                    <h4>{t("my_donations")}</h4>
+                    <p>{t("track_donations_sub")}</p>
                 </Link>
                 <Link to="/payments" className="category-card">
-                    <h4>Payment Methods</h4>
-                    <p>Manage cards and bank accounts.</p>
+                    <h4>{t("payment_methods")}</h4>
+                    <p>{t("manage_payments_sub")}</p>
                 </Link>
                 <Link to="/notifications" className="category-card">
-                    <h4>Notifications</h4>
-                    <p>Campaign and donation updates.</p>
+                    <h4>{t("notifications")}</h4>
+                    <p>{t("campaign_updates_sub")}</p>
                 </Link>
                 <Link to="/security" className="category-card">
-                    <h4>Security</h4>
-                    <p>2FA, alerts, and privacy controls.</p>
+                    <h4>{t("security")}</h4>
+                    <p>{t("security_settings_sub")}</p>
                 </Link>
                 <Link to="/help" className="category-card">
-                    <h4>Help & Support</h4>
-                    <p>FAQ, support channels, and guidance.</p>
+                    <h4>{t("help_support_title")}</h4>
+                    <p>{t("help_support_sub")}</p>
                 </Link>
             </div>
         </section>

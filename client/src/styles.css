@@ -395,6 +395,39 @@ a {
     box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
 }
 
+/* Language Toggle Button Style */
+.lang-toggle {
+    height: 42px;
+    border-radius: 999px;
+    background: var(--social-btn-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0 14px;
+    gap: 6px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+    font-family: inherit;
+}
+
+.lang-toggle:hover {
+    background: var(--nav-link-hover);
+    transform: scale(1.05);
+    border-color: var(--cyan);
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
+}
+
+.lang-toggle i {
+    font-size: 1.15rem;
+    color: var(--cyan);
+}
+
+
 /* Navigation-specific Sleek Buttons */
 .nav-auth .btn {
     padding: 10px 20px;

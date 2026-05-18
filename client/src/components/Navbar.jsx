@@ -2,9 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "../context/LanguageContext";
 
 export default function Navbar() {
     const { isAuthenticated, logout, user } = useAuth();
+    const { language, setLanguage, t } = useTranslation();
     const [open, setOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [theme, setTheme] = useState(() => {
@@ -18,6 +20,11 @@ export default function Navbar() {
 
     const toggleTheme = () => {
         setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+    };
+
+    const toggleLanguage = (e) => {
+        e.stopPropagation();
+        setLanguage((prev) => (prev === "en" ? "bn" : "en"));
     };
 
     const menuRef = useRef(null);
@@ -91,10 +98,19 @@ export default function Navbar() {
                         alt="Charity"
                         style={{ width: 36, height: 36, objectFit: "contain", borderRadius: 8, background: "rgba(255,255,255,0.03)", padding: 4 }}
                     />
-                    <span className="brand-text">CHARITY</span>
+                    <span className="brand-text">{t("brand_name")}</span>
                 </Link>
 
                 <div className="nav-controls">
+                    <button
+                        onClick={toggleLanguage}
+                        className="lang-toggle mobile-only"
+                        title={language === "en" ? "বাংলায় দেখুন" : "View in English"}
+                    >
+                        <i className="ph ph-translate"></i>
+                        <span>{language === "en" ? "EN" : "বাং"}</span>
+                    </button>
+
                     <button
                         onClick={toggleTheme}
                         className="theme-toggle mobile-only"
@@ -119,33 +135,41 @@ export default function Navbar() {
                 <div className="menu-wrap" ref={menuRef}>
                     <div className="nav-links" onClick={close}>
                     <NavLink to="/" end>
-                        <i className="ph ph-house"></i> Home
+                        <i className="ph ph-house"></i> {t("home")}
                     </NavLink>
                     <NavLink to="/search">
-                        <i className="ph ph-magnifying-glass"></i> Search
+                        <i className="ph ph-magnifying-glass"></i> {t("search")}
                     </NavLink>
                     <NavLink to="/categories">
-                        <i className="ph ph-squares-four"></i> Categories
+                        <i className="ph ph-squares-four"></i> {t("categories")}
                     </NavLink>
                     <NavLink to="/campaigns">
-                        <i className="ph ph-megaphone"></i> Campaigns
+                        <i className="ph ph-megaphone"></i> {t("campaigns")}
                     </NavLink>
                     <NavLink to="/ngo-locator">
-                        <i className="ph ph-map-pin"></i> NGOs
+                        <i className="ph ph-map-pin"></i> {t("ngos")}
                     </NavLink>
                     {isAuthenticated && (
                         <NavLink to="/dashboard">
-                            <i className="ph ph-squares-four"></i> Dashboard
+                            <i className="ph ph-squares-four"></i> {t("dashboard")}
                         </NavLink>
                     )}
                     {isAuthenticated && (
                         <NavLink to="/profile">
-                            <i className="ph ph-user"></i> Profile
+                            <i className="ph ph-user"></i> {t("profile")}
                         </NavLink>
                     )}
                     </div>
 
                     <div className="nav-auth" onClick={close}>
+                    <button
+                        onClick={toggleLanguage}
+                        className="lang-toggle desktop-only"
+                        title={language === "en" ? "বাংলায় দেখুন" : "View in English"}
+                    >
+                        <i className="ph ph-translate"></i>
+                        <span>{language === "en" ? "EN" : "বাং"}</span>
+                    </button>
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
@@ -162,16 +186,16 @@ export default function Navbar() {
                                 <i className="ph ph-user-circle"></i> {user?.name}
                             </span>
                             <button onClick={logout} className="btn btn-outline">
-                                <i className="ph ph-sign-out"></i> Logout
+                                <i className="ph ph-sign-out"></i> {t("logout")}
                             </button>
                         </>
                     ) : (
                         <>
                             <Link className="btn btn-outline" to="/login">
-                                <i className="ph ph-sign-in"></i> Login
+                                <i className="ph ph-sign-in"></i> {t("login")}
                             </Link>
                             <Link className="btn" to="/register">
-                                <i className="ph ph-user-plus"></i> Join
+                                <i className="ph ph-user-plus"></i> {t("join")}
                             </Link>
                         </>
                     )}

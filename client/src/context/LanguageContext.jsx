@@ -1,0 +1,573 @@
+import React, { createContext, useContext, useState, useEffect } from "react";
+
+const LanguageContext = createContext();
+
+const translations = {
+    en: {
+        // Navbar
+        home: "Home",
+        search: "Search",
+        categories: "Categories",
+        campaigns: "Campaigns",
+        ngos: "NGOs",
+        dashboard: "Dashboard",
+        profile: "Profile",
+        login: "Login",
+        join: "Join",
+        logout: "Logout",
+        brand_name: "CHARITY",
+        switch_theme: "Switch Theme",
+        
+        // Footer
+        footer_desc: "Empowering global communities by shifting the paradigm of donation tracing with absolute cryptographic transparency.",
+        blockchain_status: "Blockchain Tracing Verified & Secured",
+        join_movement: "Join the Movement",
+        newsletter_subtitle: "Receive bi-weekly updates on campaigns, transparent tracing, and community impact.",
+        email_placeholder: "Enter your email address",
+        sub_error_empty: "Please enter an email address.",
+        sub_error_invalid: "Please enter a valid email address.",
+        sub_success: "Welcome to our transparent giving network!",
+        active_donors: "Hearts Beat / Active Donors",
+        total_funds_distributed: "Total Funds Distributed Safely",
+        verified_ngos_count: "${count}+ Verified NGOs",
+        verified_ngos_label: "Verified NGOs",
+        global_networks: "Global Support Networks",
+        explore_campaigns_footer: "Explore Campaigns",
+        active_campaigns_footer: "Active Campaigns",
+        all_categories_footer: "All Categories",
+        verified_ngo_locator: "Verified NGO Locator",
+        platform_legal: "Platform & Legal",
+        contact_support_footer: "Contact & Support",
+        help_center_faq: "Help Center & FAQ",
+        crypto_security: "Cryptographic Security",
+        connect_socially: "Connect Socially",
+        footer_copy: "CHARITY Platform. Built with absolute transparency & trust.",
+        privacy_security: "Privacy & Security",
+        terms_user_agreement: "Terms & User Agreement",
+        back_to_top: "Back To Top",
+        
+        // Home Page
+        hero_eyebrow: "Uniting Hands, Transforming Lives",
+        hero_title_empower: "Empower",
+        hero_title_rest: " Global Change With Every Donation",
+        hero_desc: "Discover causes that matter, support transparent campaigns, and track your impact in a seamless, modern web experience.",
+        explore_campaigns: "Explore Campaigns",
+        view_categories: "View Categories",
+        create_request: "Create Request",
+        featured_campaigns: "Featured Campaigns",
+        see_all: "See all",
+        raised_of: "Raised ${raised} of ${goal}",
+        view_campaign: "View Campaign",
+        donation_categories: "Donation Categories",
+        
+        // Categories & Subtitles
+        cat_blood: "Blood",
+        cat_blood_sub: "Save Lives",
+        cat_food: "Food",
+        cat_food_sub: "Feed Hungry",
+        cat_clothes: "Clothes",
+        cat_clothes_sub: "Spread Warmth",
+        cat_medicine: "Medicine",
+        cat_medicine_sub: "Heal Care",
+        cat_fund: "Fund",
+        cat_fund_sub: "Support Us",
+        cat_ngos: "NGOs",
+        cat_ngos_sub: "Locate Help",
+        cat_education: "Education",
+        cat_education_sub: "Build Future",
+        cat_gifts: "Gifts",
+        cat_gifts_sub: "Share Joy",
+        cat_electronics: "Electronics",
+        cat_electronics_sub: "Reuse Tech",
+        cat_furniture: "Furniture",
+        cat_furniture_sub: "Home Comfort",
+        cat_environment: "Environment",
+        cat_environment_sub: "Plant Trees",
+
+        // Buttons & Forms
+        submit: "Submit",
+        save: "Save",
+        cancel: "Cancel",
+        loading: "Loading...",
+        name: "Name",
+        email: "Email",
+        message: "Message",
+        
+        // NGO Locator
+        ngo_locator_title: "NGO Directory Map Locator",
+        ngo_locator_desc: "Find verified NGOs and support centers near you. View their profiles, ratings, and contact info.",
+        find_ngos: "Find Near NGOs",
+        all_categories: "All Categories",
+        miles_away: "miles away",
+        rating: "Rating",
+        global_ngo_locator_title: "Global NGO Locator",
+        global_ngo_locator_subtitle: "Find and connect with verified charitable organizations in your area.",
+        search_ngos_placeholder: "Search NGOs by name or cause...",
+        nearby_ngos_title: "Nearby NGOs",
+        ngos_found_suffix: "Found",
+        no_ngos_match: "No NGOs match your search.",
+        contact_ngo_btn: "Contact NGO",
+        geolocation_not_supported: "Geolocation is not supported by your browser",
+        geolocation_failed: "Unable to retrieve your location",
+        
+        // Search Page
+        search_campaigns: "Search Campaigns",
+        search_placeholder: "Search for campaigns by title, description, or tags...",
+        all_tags: "All Tags",
+        no_campaigns: "No campaigns found matching your criteria.",
+        
+        // Dashboard
+        welcome_back: "Welcome",
+        total_donated: "Total Donated",
+        contributions: "Contributions",
+        active_requests: "Active Requests",
+        quick_actions: "Quick Actions",
+        make_donation: "Make a Donation",
+        recent_activity: "Recent Activity",
+        no_recent_activity: "No recent activities found.",
+        my_requests: "My Donation Requests",
+        create_new_request: "Create New Request",
+        my_donations: "My Donations",
+        notifications: "Notifications",
+        no_donations_yet: "You haven't made any donations yet.",
+        create_new_campaign: "Create New Campaign",
+        campaign_title_label: "Campaign Title",
+        campaign_title_placeholder: "e.g. Save the Forest",
+        goal_amount_label: "Goal Amount (USD)",
+        select_category_placeholder: "Select a Category",
+        campaign_desc_placeholder: "Describe the campaign...",
+        campaign_image_label: "Campaign Image",
+        uploading: "Uploading...",
+        publishing: "Publishing...",
+        publish_campaign_btn: "Publish Campaign",
+        image_upload_success: "Image uploaded successfully.",
+        image_upload_failed: "Failed to upload image.",
+        campaign_create_success: "Campaign created successfully.",
+        
+        // Profile
+        profile_settings: "Profile Settings",
+        personal_info: "Personal Information",
+        full_name: "Full Name",
+        phone_number: "Phone Number",
+        location: "Location",
+        save_changes: "Save Changes",
+        security_settings: "Security Settings",
+        change_password: "Change Password",
+        current_password: "Current Password",
+        new_password: "New Password",
+        confirm_password: "Confirm Password",
+        update_password: "Update Password",
+        payment_methods: "Payment Methods",
+        add_payment_method: "Add Payment Method",
+        saved_cards: "Saved Cards",
+        no_saved_cards: "No saved payment methods found.",
+        avatar_upload_failed: "Failed to upload avatar",
+        profile_update_success: "Profile updated successfully!",
+        profile_update_failed: "Failed to update profile.",
+        profile_details_title: "Profile Details",
+        edit_profile_btn: "Edit Profile",
+        avatar_label: "Avatar",
+        saving: "Saving...",
+        not_set: "Not set",
+        track_donations_sub: "Track your contribution timeline.",
+        manage_payments_sub: "Manage cards and bank accounts.",
+        campaign_updates_sub: "Campaign and donation updates.",
+        security: "Security",
+        security_settings_sub: "2FA, alerts, and privacy controls.",
+        help_support_title: "Help & Support",
+        help_support_sub: "FAQ, support channels, and guidance.",
+
+        // Campaign Details Page
+        raised: "Raised",
+        goal: "Goal",
+        donate_now: "Donate Now",
+        donation_card_sub: "Your contribution helps make this campaign a reality.",
+        login_to_donate: "Please login to make a donation.",
+        donation_amount_label: "Amount (USD)",
+        message_optional: "Message (Optional)",
+        message_placeholder: "Leave a supportive message...",
+        donation_success_notice: "Donation successful. Thank you for your support.",
+
+        // Contact Support Page
+        contact_support: "Contact Support",
+        send_us_message: "Send us a message",
+        send: "Send",
+        phone_label: "Phone",
+        email_label: "Email",
+        website_label: "Website",
+
+        // Create Request Page
+        details_step: "Details",
+        items_step: "Items",
+        review_step: "Review",
+        request_title_label: "Request Title",
+        request_title_placeholder: "e.g. Need Medical Supplies",
+        request_desc_label: "Description",
+        request_desc_placeholder: "Provide detailed information about your request...",
+        category_label: "Category",
+        urgency_label: "Urgency",
+        delivery_address_label: "Delivery Address",
+        address_placeholder: "Full address details",
+        review_request_title: "Review Request",
+        review_title: "Title",
+        review_description: "Description",
+        review_category: "Category",
+        review_urgency: "Urgency",
+        review_address: "Address",
+        not_provided: "Not provided",
+        back_btn: "Back",
+        next_btn: "Next",
+        submitting_btn: "Submitting...",
+        submit_request_btn: "Submit Request",
+        login_first_error: "Please login first to submit request.",
+        request_success_notice: "Request created successfully.",
+        urgency_low: "Low",
+        urgency_medium: "Medium",
+        urgency_high: "High",
+        cat_clothing: "Clothing",
+        cat_medical: "Medical",
+        cat_disaster: "Disaster Relief",
+
+        // Category Donation Page
+        category_not_found: "Category not found",
+        donation_suffix: "Donation",
+        category_donation_desc: "Fill out the form with your donation details. You can upload an image of the items you wish to donate.",
+        item_details_title: "Item Details",
+        item_name_label: "Item Name",
+        item_name_placeholder: "e.g. Winter Coats",
+        item_desc_placeholder: "Condition, size, notes...",
+        quantity_label: "Quantity",
+        pickup_address_label: "Pickup Address",
+        pickup_address_placeholder: "City, ZIP",
+        image_upload_label: "Image Upload",
+        please_wait: "Please wait...",
+        submit_donation_btn: "Submit Donation",
+        donation_offer_prefix: "Donation Offer: ${item}",
+        donation_offer_desc: "${quantity}x ${item} - ${description} [Image: ${imageUrl}]",
+        donation_save_success: "Donation request saved successfully. Our team will contact you.",
+        donation_save_failed: "Failed to save donation.",
+
+        // Auth Pages
+        welcome_back_auth: "Welcome Back",
+        password_label: "Password",
+        new_user_question: "New user?",
+        create_account_link: "Create account",
+        create_account_title: "Create Your Account",
+        register_btn: "Register",
+        already_have_account: "Already have an account?",
+
+        // Security Page
+        two_factor_auth_label: "Two-Factor Authentication",
+        login_alerts_label: "Login Alerts",
+        session_timeout_label: "Session Timeout",
+        remember_device_label: "Remember Device",
+
+        // Payments Page
+        default_payment_label: "Default",
+        set_default_btn: "Set Default"
+    },
+    bn: {
+        // Navbar
+        home: "হোম",
+        search: "অনুসন্ধান",
+        categories: "ক্যাটাগরি",
+        campaigns: "ক্যাম্পেইন",
+        ngos: "এনজিও",
+        dashboard: "ড্যাশবোর্ড",
+        profile: "প্রোফাইল",
+        login: "লগইন",
+        join: "যোগ দিন",
+        logout: "লগআউট",
+        brand_name: "চ্যারিটি",
+        switch_theme: "থিম পরিবর্তন করুন",
+        
+        // Footer
+        footer_desc: "পরম ক্রিপ্টোগ্রাফিক স্বচ্ছতার সাথে অনুদান ট্র্যাকিংয়ের দৃষ্টান্ত পরিবর্তন করে বিশ্বব্যাপী সম্প্রদায়কে ক্ষমতায়ন করা।",
+        blockchain_status: "ব্লকচেইন ট্র্যাকিং যাচাইকৃত এবং সুরক্ষিত",
+        join_movement: "আন্দোলনে যোগ দিন",
+        newsletter_subtitle: "ক্যাম্পেইন, স্বচ্ছ ট্র্যাকিং এবং সামাজিক প্রভাব সম্পর্কে পাক্ষিক আপডেট পান।",
+        email_placeholder: "আপনার ইমেল ঠিকানা লিখুন",
+        sub_error_empty: "অনুগ্রহ করে একটি ইমেল ঠিকানা লিখুন।",
+        sub_error_invalid: "অনুগ্রহ করে একটি সঠিক ইমেল ঠিকানা লিখুন।",
+        sub_success: "আমাদের স্বচ্ছ দান নেটওয়ার্কে স্বাগতম!",
+        active_donors: "হার্টস বিট / সক্রিয় দাতা",
+        total_funds_distributed: "নিরাপদে বিতরণকৃত মোট তহবিল",
+        verified_ngos_count: "${count}+ যাচাইকৃত এনজিও",
+        verified_ngos_label: "যাচাইকৃত এনজিও",
+        global_networks: "বিশ্বব্যাপী সহায়তা নেটওয়ার্ক",
+        explore_campaigns_footer: "ক্যাম্পেইন এক্সপ্লোর করুন",
+        active_campaigns_footer: "সক্রিয় ক্যাম্পেইনসমূহ",
+        all_categories_footer: "সব ক্যাটাগরি",
+        verified_ngo_locator: "যাচাইকৃত এনজিও লোকেটার",
+        platform_legal: "প্ল্যাটফর্ম এবং আইনি",
+        contact_support_footer: "যোগাযোগ এবং সহায়তা",
+        help_center_faq: "সহায়তা কেন্দ্র এবং এফএকিউ",
+        crypto_security: "ক্রিপ্টোগ্রাফিক নিরাপত্তা",
+        connect_socially: "সামাজিকভাবে যুক্ত হোন",
+        footer_copy: "চ্যারিটি প্ল্যাটফর্ম। পরম স্বচ্ছতা এবং বিশ্বাসের সাথে নির্মিত।",
+        privacy_security: "গোপনীয়তা ও নিরাপত্তা",
+        terms_user_agreement: "শর্তাবলী এবং ব্যবহারকারী চুক্তি",
+        back_to_top: "উপরে যান",
+        
+        // Home Page
+        hero_eyebrow: "একত্রে হাত বাড়াই, জীবন বদলাই",
+        hero_title_empower: "সক্ষম করুন",
+        hero_title_rest: " প্রতিটি অনুদানের মাধ্যমে বিশ্বব্যাপী পরিবর্তন",
+        hero_desc: "আপনার পছন্দসই কারণগুলো খুঁজুন, স্বচ্ছ ক্যাম্পেইনে সহায়তা করুন এবং একটি আধুনিক ও সহজ ওয়েবসাইটের মাধ্যমে আপনার প্রভাব ট্র্যাক করুন।",
+        explore_campaigns: "ক্যাম্পেইনসমূহ দেখুন",
+        view_categories: "ক্যাটাগরি দেখুন",
+        create_request: "অনুরোধ তৈরি করুন",
+        featured_campaigns: "বিশেষ ক্যাম্পেইনসমূহ",
+        see_all: "সব দেখুন",
+        raised_of: "${goal} এর মধ্যে ${raised} সংগৃহীত",
+        view_campaign: "ক্যাম্পেইন দেখুন",
+        donation_categories: "অনুদানের ক্যাটাগরি",
+        
+        // Categories & Subtitles
+        cat_blood: "রক্ত",
+        cat_blood_sub: "জীবন বাঁচান",
+        cat_food: "খাদ্য",
+        cat_food_sub: "ক্ষুধার্তকে খাওয়ান",
+        cat_clothes: "পোশাক",
+        cat_clothes_sub: "উষ্ণতা ছড়ান",
+        cat_medicine: "ওষুধ",
+        cat_medicine_sub: "সেবা করুন",
+        cat_fund: "তহবিল",
+        cat_fund_sub: "সহায়তা করুন",
+        cat_ngos: "এনজিও",
+        cat_ngos_sub: "সাহায্য খুঁজুন",
+        cat_education: "শিক্ষা",
+        cat_education_sub: "ভবিষ্যৎ গড়ুন",
+        cat_gifts: "উপহার",
+        cat_gifts_sub: "আনন্দ ভাগ করুন",
+        cat_electronics: "ইলেকট্রনিক্স",
+        cat_electronics_sub: "প্রযুক্তি পুনরায় ব্যবহার করুন",
+        cat_furniture: "আসবাবপত্র",
+        cat_furniture_sub: "ঘরের আরামদায়কতা",
+        cat_environment: "পরিবেশ",
+        cat_environment_sub: "গাছ লাগান",
+
+        // Buttons & Forms
+        submit: "জমা দিন",
+        save: "সংরক্ষণ করুন",
+        cancel: "বাতিল করুন",
+        loading: "লোড হচ্ছে...",
+        name: "নাম",
+        email: "ইমেইল",
+        message: "বার্তা",
+        
+        // NGO Locator
+        ngo_locator_title: "এনজিও ডিরেক্টরি ম্যাপ লোকেটার",
+        ngo_locator_desc: "Find verified NGOs and support centers near you. View their profiles, ratings, and contact info.",
+        find_ngos: "निकটবর্তী এনজিও খুঁজুন",
+        all_categories: "সব ক্যাটাগরি",
+        miles_away: "মাইল দূরে",
+        rating: "রেটিং",
+        global_ngo_locator_title: "গ্লোবাল এনজিও লোকেটার",
+        global_ngo_locator_subtitle: "আপনার অঞ্চলের যাচাইকৃত দাতব্য সংস্থাগুলোর সাথে যুক্ত হোন এবং তাদের খুঁজুন।",
+        search_ngos_placeholder: "নাম বা বিষয় অনুযায়ী এনজিও খুঁজুন...",
+        nearby_ngos_title: "নিকটবর্তী এনজিও",
+        ngos_found_suffix: "পাওয়া গেছে",
+        no_ngos_match: "আপনার অনুসন্ধানের সাথে মিলে যাওয়া কোনো এনজিও পাওয়া যায়নি।",
+        contact_ngo_btn: "এনজিওর সাথে যোগাযোগ",
+        geolocation_not_supported: "আপনার ব্রাউজার ভূ-অবস্থান সমর্থন করে না",
+        geolocation_failed: "আপনার অবস্থান নির্ধারণ করা সম্ভব হয়নি",
+        
+        // Search Page
+        search_campaigns: "ক্যাম্পেইন খুঁজুন",
+        search_placeholder: "শিরোনাম, বিবরণ বা ট্যাগ দ্বারা ক্যাম্পেইন খুঁজুন...",
+        all_tags: "সব ট্যাগ",
+        no_campaigns: "আপনার অনুসন্ধানের সাথে মিলে যাওয়া কোনো ক্যাম্পেইন পাওয়া যায়নি।",
+        
+        // Dashboard
+        welcome_back: "স্বাগতম",
+        total_donated: "মোট অনুদান",
+        contributions: "অবদানসমূহ",
+        active_requests: "সক্রিয় অনুরোধ",
+        quick_actions: "দ্রুত লিংক",
+        make_donation: "অনূদান করুন",
+        recent_activity: "সাম্প্রতিক কার্যক্রম",
+        no_recent_activity: "কোনো সাম্প্রতিক কার্যক্রম পাওয়া যায়নি।",
+        my_requests: "আমার অনুদানের অনুরোধসমূহ",
+        create_new_request: "নতুন অনুরোধ তৈরি করুন",
+        my_donations: "আমার অনুদানসমূহ",
+        notifications: "বিজ্ঞপ্তিসমূহ",
+        no_donations_yet: "আপনি এখনও কোনো অনুদান দেননি।",
+        create_new_campaign: "নতুন ক্যাম্পেইন তৈরি করুন",
+        campaign_title_label: "ক্যাম্পেইনের শিরোনাম",
+        campaign_title_placeholder: "যেমন: বন রক্ষা করুন",
+        goal_amount_label: "লক্ষ্য পরিমাণ (USD)",
+        select_category_placeholder: "ক্যাটাগরি নির্বাচন করুন",
+        campaign_desc_placeholder: "ক্যাম্পেইন সম্পর্কে বর্ণনা করুন...",
+        campaign_image_label: "ক্যাম্পেইনের ছবি",
+        uploading: "আপলোড হচ্ছে...",
+        publishing: "প্রকাশ করা হচ্ছে...",
+        publish_campaign_btn: "ক্যাম্পেইন প্রকাশ করুন",
+        image_upload_success: "ছবি সফলভাবে আপলোড করা হয়েছে।",
+        image_upload_failed: "ছবি আপলোড করতে ব্যর্থ হয়েছে।",
+        campaign_create_success: "ক্যাম্পেইন সফলভাবে তৈরি করা হয়েছে।",
+        
+        // Profile
+        profile_settings: "প্রোফাইল সেটিংস",
+        personal_info: "ব্যক্তিগত তথ্য",
+        full_name: "পূর্ণ নাম",
+        phone_number: "ফোন নম্বর",
+        location: "ঠিকানা",
+        save_changes: "পরিবর্তন সংরক্ষণ করুন",
+        security_settings: "নিরাপত্তা সেটিংস",
+        change_password: "ক্যাম্পেইন পরিবর্তন",
+        current_password: "বর্তমান পাসওয়ার্ড",
+        new_password: "নতুন পাসওয়ার্ড",
+        confirm_password: "পাসওয়ার্ড নিশ্চিত করুন",
+        update_password: "পাসওয়ার্ড আপডেট করুন",
+        payment_methods: "পেমেন্ট পদ্ধতি",
+        add_payment_method: "পেমেন্ট পদ্ধতি যোগ করুন",
+        saved_cards: "সংরক্ষিত কার্ডসমূহ",
+        no_saved_cards: "কোনো সংরক্ষিত পেমেন্ট পদ্ধতি পাওয়া যায়নি।",
+        avatar_upload_failed: "অ্যাভাটার আপলোড করতে ব্যর্থ হয়েছে",
+        profile_update_success: "প্রোফাইল সফলভাবে আপডেট করা হয়েছে!",
+        profile_update_failed: "প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।",
+        profile_details_title: "প্রোফাইলের বিবরণ",
+        edit_profile_btn: "প্রোফাইল পরিবর্তন করুন",
+        avatar_label: "অ্যাভাটার",
+        saving: "সংরক্ষণ করা হচ্ছে...",
+        not_set: "নির্ধারণ করা নেই",
+        track_donations_sub: "আপনার অনুদানের ইতিহাস ট্র্যাক করুন।",
+        manage_payments_sub: "কার্ড এবং ব্যাংক অ্যাকাউন্ট পরিচালনা করুন।",
+        campaign_updates_sub: "ক্যাম্পেইন এবং অনুদানের আপডেট।",
+        security: "নিরাপত্তা",
+        security_settings_sub: "২এফএ, অ্যালার্ট এবং গোপনীয়তা নিয়ন্ত্রণ।",
+        help_support_title: "সহায়তা এবং সমর্থন",
+        help_support_sub: "এফএকিউ, সমর্থন চ্যানেল এবং দিকনির্দেশনা।",
+
+        // Campaign Details Page
+        raised: "সংগৃহীত",
+        goal: "লক্ষ্য",
+        donate_now: "এখনই দান করুন",
+        donation_card_sub: "আপনার অবদান এই ক্যাম্পেইনটিকে বাস্তবায়িত করতে সাহায্য করবে।",
+        login_to_donate: "অনুদান দিতে দয়া করে লগইন করুন।",
+        donation_amount_label: "পরিমাণ (USD)",
+        message_optional: "বার্তা (ঐচ্ছিক)",
+        message_placeholder: "একটি সমর্থনমূলক বার্তা লিখুন...",
+        donation_success_notice: "অনুদান সফল হয়েছে। আপনার সমর্থনের জন্য ধন্যবাদ।",
+
+        // Contact Support Page
+        contact_support: "যোগাযোগ এবং সহায়তা",
+        send_us_message: "আমাদের একটি বার্তা পাঠান",
+        send: "পাঠান",
+        phone_label: "ফোন",
+        email_label: "ইমেইল",
+        website_label: "ওয়েবসাইট",
+
+        // Create Request Page
+        details_step: "বিবরণ",
+        items_step: "উপাদানসমূহ",
+        review_step: "পর্যালোচনা",
+        request_title_label: "অনুরোধের শিরোনাম",
+        request_title_placeholder: "যেমন: চিকিৎসা সরঞ্জাম প্রয়োজন",
+        request_desc_label: "বর্ণনা",
+        request_desc_placeholder: "আপনার অনুরোধ সম্পর্কে বিস্তারিত তথ্য প্রদান করুন...",
+        category_label: "শ্রেণীবিভাগ",
+        urgency_label: "জরুরি অবস্থা",
+        delivery_address_label: "ডেলিভারি ঠিকানা",
+        address_placeholder: "পূর্ণ ঠিকানা বিবরণ",
+        review_request_title: "অনুরোধ পর্যালোচনা",
+        review_title: "শিরোনাম",
+        review_description: "বর্ণনা",
+        review_category: "শ্রেণীবিভাগ",
+        review_urgency: "জরুরি অবস্থা",
+        review_address: "ঠিকানা",
+        not_provided: "প্রদান করা হয়নি",
+        back_btn: "পিছনে",
+        next_btn: "পরবর্তী",
+        submitting_btn: "জমা দেওয়া হচ্ছে...",
+        submit_request_btn: "অনুরোধ জমা দিন",
+        login_first_error: "অনুরোধ জমা দিতে দয়া করে প্রথমে লগইন করুন।",
+        request_success_notice: "অনুরোধ সফলভাবে তৈরি করা হয়েছে।",
+        urgency_low: "কম",
+        urgency_medium: "মাঝারি",
+        urgency_high: "উচ্চ",
+        cat_clothing: "পোশাক",
+        cat_medical: "চিকিৎসা",
+        cat_disaster: "দুর্যোগ ত্রাণ",
+
+        // Category Donation Page
+        category_not_found: "ক্যাটাগরি পাওয়া যায়নি",
+        donation_suffix: "অনুদান",
+        category_donation_desc: "আপনার অনুদানের বিবরণ দিয়ে ফর্মটি পূরণ করুন। আপনি যে আইটেমগুলি দান করতে চান তার একটি ছবি আপলোড করতে পারেন।",
+        item_details_title: "আইটেমের বিবরণ",
+        item_name_label: "আইটেমের নাম",
+        item_name_placeholder: "যেমন: শীতকালীন জ্যাকেট",
+        item_desc_placeholder: "অবস্থা, সাইজ, মন্তব্য...",
+        quantity_label: "পরিমাণ",
+        pickup_address_label: "পিকআপ ঠিকানা",
+        pickup_address_placeholder: "শহর, জিপ কোড",
+        image_upload_label: "ছবি আপলোড",
+        please_wait: "দয়া করে অপেক্ষা করুন...",
+        submit_donation_btn: "অনুদান জমা দিন",
+        donation_offer_prefix: "অনুদানের অফার: ${item}",
+        donation_offer_desc: "${quantity}x ${item} - ${description} [ছবি: ${imageUrl}]",
+        donation_save_success: "অনুদান অনুরোধ সফলভাবে সংরক্ষিত হয়েছে। আমাদের টিম আপনার সাথে যোগাযোগ করবে।",
+        donation_save_failed: "অনুদান সংরক্ষণ করতে ব্যর্থ হয়েছে।",
+
+        // Auth Pages
+        welcome_back_auth: "আবারো স্বাগতম",
+        password_label: "পাসওয়ার্ড",
+        new_user_question: "নতুন ব্যবহারকারী?",
+        create_account_link: "অ্যাকাউন্ট তৈরি করুন",
+        create_account_title: "আপনার অ্যাকাউন্ট তৈরি করুন",
+        register_btn: "রেজিস্টার করুন",
+        already_have_account: "ইতিমধ্যে একটি অ্যাকাউন্ট আছে?",
+
+        // Security Page
+        two_factor_auth_label: "দ্বি-স্তর বিশিষ্ট প্রমাণীকরণ",
+        login_alerts_label: "লগইন সতর্কতা",
+        session_timeout_label: "সেশন সমাপ্তি সময়সীমা",
+        remember_device_label: "ডিভাইস মনে রাখুন",
+
+        // Payments Page
+        default_payment_label: "ডিফল্ট",
+        set_default_btn: "ডিফল্ট নির্ধারণ করুন"
+    }
+};
+
+export function LanguageProvider({ children }) {
+    const [language, setLanguage] = useState(() => {
+        return localStorage.getItem("language") || "en";
+    });
+
+    useEffect(() => {
+        localStorage.setItem("language", language);
+    }, [language]);
+
+    const t = (key, variables = {}) => {
+        const langData = translations[language];
+        let text = langData && langData[key] ? langData[key] : translations["en"][key];
+        
+        if (!text) {
+            // Return key itself if no translation is found in English or Bangla
+            return key;
+        }
+
+        // Replace template placeholders like ${raised} with actual values
+        Object.keys(variables).forEach((varKey) => {
+            text = text.replace(new RegExp(`\\$\\{${varKey}\\}`, "g"), variables[varKey]);
+        });
+
+        return text;
+    };
+
+    return (
+        <LanguageContext.Provider value={{ language, setLanguage, t }}>
+            {children}
+        </LanguageContext.Provider>
+    );
+}
+
+export function useTranslation() {
+    const context = useContext(LanguageContext);
+    if (!context) {
+        throw new Error("useTranslation must be used within a LanguageProvider");
+    }
+    return context;
+}

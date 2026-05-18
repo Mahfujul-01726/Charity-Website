@@ -1,1 +1,333 @@
-import { useEffect, useState, useRef } from "react";import { Link } from "react-router-dom";import { campaignApi, donationApi, uploadApi } from "../api/client";import { useAuth } from "../context/AuthContext";export default function DashboardPage() {    const { user } = useAuth();    const fileInputRef = useRef(null);    const [donations, setDonations] = useState([]);    const [createError, setCreateError] = useState("");    const [notice, setNotice] = useState("");    const [uploading, setUploading] = useState(false);    const [loading, setLoading] = useState(false);        const [campaignForm, setCampaignForm] = useState({        title: "",        description: "",        goalAmount: "",        category: "",        imageUrl: "",    });    useEffect(() => {        const loadDonations = async () => {            try {                const data = await donationApi.mine();                setDonations(data);            } catch (error) {                setDonations([]);            }        };        loadDonations();    }, []);    const handleCampaignChange = (e) => {        setCampaignForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));    };    const handleFileChange = async (e) => {        const file = e.target.files[0];        if (!file) return;        try {            setUploading(true);            setCreateError("");            const url = await uploadApi.uploadImage(file);            setCampaignForm((prev) => ({ ...prev, imageUrl: url }));            setNotice("Image uploaded successfully.");        } catch (err) {            setCreateError("Failed to upload image. " + err.message);        } finally {            setUploading(false);        }    };    const handleCreateCampaign = async (e) => {        e.preventDefault();        setCreateError("");        setNotice("");        setLoading(true);        try {            await campaignApi.create({                ...campaignForm,                goalAmount: Number(campaignForm.goalAmount),            });            setNotice("Campaign created successfully.");            setCampaignForm({                title: "",                description: "",                goalAmount: "",                category: "",                imageUrl: "",            });            if (fileInputRef.current) fileInputRef.current.value = "";        } catch (err) {            setCreateError(err.message);        } finally {            setLoading(false);        }    };    return (        <section className="container section dashboard-grid">            <div className="two-col">                <article className="glass-card">                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>                        <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'var(--accent-gradient)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>                            <i className="ph ph-user"></i>                        </div>                        <div>                            <h2 style={{ marginBottom: '4px' }}>Welcome, {user?.name}</h2>                            <span className="chip" style={{ fontSize: '0.8rem' }}><i className="ph ph-shield-check"></i> {user?.role}</span>                        </div>                    </div>                    <div style={{ marginBottom: '24px' }}>                        <p style={{ color: 'var(--text-secondary)', marginBottom: '8px' }}><i className="ph ph-envelope"></i> {user?.email}</p>                    </div>                                        <div className="dashboard-links-grid">                        <Link to="/history" className="btn btn-secondary" style={{ padding: '10px' }}><i className="ph ph-clock-counter-clockwise"></i> My Donations</Link>                        <Link to="/notifications" className="btn btn-secondary" style={{ padding: '10px' }}><i className="ph ph-bell"></i> Notifications</Link>                        <Link to="/payments" className="btn btn-secondary" style={{ padding: '10px' }}><i className="ph ph-credit-card"></i> Payments</Link>                        <Link to="/security" className="btn btn-secondary" style={{ padding: '10px' }}><i className="ph ph-lock-key"></i> Security</Link>                    </div>                </article>                <article className="glass-card">                    <h3 style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>                        <i className="ph ph-clock-counter-clockwise"></i> My Donations                    </h3>                    {donations.length === 0 && (                        <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--text-tertiary)' }}>                            <i className="ph ph-receipt" style={{ fontSize: '3rem', marginBottom: '16px', display: 'block' }}></i>                            <p>You haven't made any donations yet.</p>                        </div>                    )}                    {donations.length > 0 && (                        <ul className="list-clean" style={{ maxHeight: '300px', overflowY: 'auto', paddingRight: '8px' }}>                            {donations.map((donation) => (                                <li key={donation._id} className="list-item" style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', marginBottom: '8px', border: '1px solid var(--glass-border)' }}>                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>                                        <div>                                            <strong style={{ display: 'block', marginBottom: '4px' }}>{donation.campaign?.title || "Campaign"}</strong>                                            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{new Date(donation.createdAt).toLocaleDateString()}</span>                                        </div>                                        <div style={{ background: 'var(--accent-gradient)', padding: '6px 12px', borderRadius: '999px', fontWeight: 'bold', color: '#ffffff' }}>                                            ${donation.amount}                                        </div>                                    </div>                                </li>                            ))}                        </ul>                    )}                </article>            </div>            <article className="glass-card" style={{ marginTop: '24px' }}>                <h3 style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>                    <i className="ph ph-plus-circle"></i> Create New Campaign                </h3>                <form className="two-col" onSubmit={handleCreateCampaign}>                    <div className="form-grid">                        <label>                            Campaign Title                            <input                                name="title"                                value={campaignForm.title}                                onChange={handleCampaignChange}                                required                                placeholder="e.g. Save the Forest"                            />                        </label>                        <label>                            Goal Amount (USD)                            <div style={{ position: 'relative' }}>                                <i className="ph ph-currency-dollar" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }}></i>                                <input                                    type="number"                                    min="1"                                    name="goalAmount"                                    value={campaignForm.goalAmount}                                    onChange={handleCampaignChange}                                    style={{ paddingLeft: '40px' }}                                    required                                />                            </div>                        </label>                        <label>                            Category                            <div style={{ position: 'relative' }}>                                <i className="ph ph-tag" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }}></i>                                <select                                    name="category"                                    value={campaignForm.category}                                    onChange={handleCampaignChange}                                    style={{ paddingLeft: '40px' }}                                    required                                >                                    <option value="" disabled>Select a Category</option>                                    <option value="Education">Education</option>                                    <option value="Medical">Medical</option>                                    <option value="Food">Food</option>                                    <option value="Disaster">Disaster</option>                                    <option value="Orphanage">Orphanage</option>                                </select>                            </div>                        </label>                    </div>                    <div className="form-grid">                        <label>                            Description                            <textarea                                rows="4"                                name="description"                                value={campaignForm.description}                                onChange={handleCampaignChange}                                placeholder="Describe the campaign..."                                required                            />                        </label>                        <label>                            Campaign Image                            <div style={{ display: 'flex', gap: '12px' }}>                                <input                                    type="file"                                    accept="image/*"                                    onChange={handleFileChange}                                    ref={fileInputRef}                                    style={{ flex: 1 }}                                />                                {uploading && <div style={{ display: 'flex', alignItems: 'center', color: 'var(--cyan)' }}><i className="ph ph-spinner-gap ph-spin"></i> Uploading...</div>}                            </div>                            {campaignForm.imageUrl && !uploading && (                                <div style={{ marginTop: '12px', borderRadius: '12px', overflow: 'hidden', height: '100px', width: '100%', border: '1px solid var(--glass-border)' }}>                                    <img src={campaignForm.imageUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />                                </div>                            )}                        </label>                                                <div style={{ marginTop: 'auto', paddingTop: '16px' }}>                            <button className="btn" type="submit" disabled={loading || uploading} style={{ width: '100%' }}>                                {loading ? "Publishing..." : <><i className="ph ph-rocket-launch"></i> Publish Campaign</>}                            </button>                        </div>                    </div>                </form>                {notice && <div style={{ marginTop: '24px', padding: '12px', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.2)', display: 'flex', alignItems: 'center', gap: '8px' }}><i className="ph ph-check-circle"></i> {notice}</div>}                {createError && <div style={{ marginTop: '24px', padding: '12px', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.2)', display: 'flex', alignItems: 'center', gap: '8px' }}><i className="ph ph-warning-circle"></i> {createError}</div>}            </article>        </section>    );}
+import React, { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import { campaignApi, donationApi, uploadApi } from "../api/client";
+import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "../context/LanguageContext";
+
+export default function DashboardPage() {
+    const { user } = useAuth();
+    const { t } = useTranslation();
+    const fileInputRef = useRef(null);
+    const [donations, setDonations] = useState([]);
+    const [createError, setCreateError] = useState("");
+    const [notice, setNotice] = useState("");
+    const [uploading, setUploading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [campaignForm, setCampaignForm] = useState({
+        title: "",
+        description: "",
+        goalAmount: "",
+        category: "Food",
+        imageUrl: "",
+    });
+
+    useEffect(() => {
+        const loadDonations = async () => {
+            try {
+                const data = await donationApi.mine();
+                setDonations(data);
+            } catch (error) {
+                setDonations([]);
+            }
+        };
+        loadDonations();
+    }, []);
+
+    const handleCampaignChange = (e) => {
+        setCampaignForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+            setUploading(true);
+            setCreateError("");
+            const url = await uploadApi.uploadImage(file);
+            setCampaignForm((prev) => ({ ...prev, imageUrl: url }));
+            setNotice(t("image_upload_success"));
+        } catch (err) {
+            setCreateError(t("image_upload_failed") + " " + err.message);
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const handleCreateCampaign = async (e) => {
+        e.preventDefault();
+        setCreateError("");
+        setNotice("");
+        setLoading(true);
+        try {
+            await campaignApi.create({
+                ...campaignForm,
+                goalAmount: Number(campaignForm.goalAmount),
+            });
+            setNotice(t("campaign_create_success"));
+            setCampaignForm({
+                title: "",
+                description: "",
+                goalAmount: "",
+                category: "Food",
+                imageUrl: "",
+            });
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        } catch (err) {
+            setCreateError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getCategoryTranslation = (cat) => {
+        const low = cat ? cat.toLowerCase() : "";
+        if (low === "disaster") return t("cat_disaster");
+        return t("cat_" + low);
+    };
+
+    return (
+        <section className="container section dashboard-grid">
+            <div className="two-col">
+                <article className="glass-card">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+                        <div style={{ 
+                            width: '64px', 
+                            height: '64px', 
+                            borderRadius: '50%', 
+                            background: 'var(--accent-gradient)', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            fontSize: '2rem' 
+                        }}>
+                            <i className="ph ph-user"></i>
+                        </div>
+                        <div>
+                            <h2 style={{ marginBottom: '4px' }}>{t("welcome_back")}, {user?.name}</h2>
+                            <span className="chip" style={{ fontSize: '0.8rem' }}>
+                                <i className="ph ph-shield-check"></i> {user?.role}
+                            </span>
+                        </div>
+                    </div>
+                    <div style={{ marginBottom: '24px' }}>
+                        <p style={{ color: 'var(--text-secondary)', marginBottom: '8px' }}>
+                            <i className="ph ph-envelope"></i> {user?.email}
+                        </p>
+                    </div>
+                                        
+                    <div className="dashboard-links-grid">
+                        <Link to="/history" className="btn btn-secondary" style={{ padding: '10px' }}>
+                            <i className="ph ph-clock-counter-clockwise"></i> {t("my_donations")}
+                        </Link>
+                        <Link to="/notifications" className="btn btn-secondary" style={{ padding: '10px' }}>
+                            <i className="ph ph-bell"></i> {t("notifications")}
+                        </Link>
+                        <Link to="/payments" className="btn btn-secondary" style={{ padding: '10px' }}>
+                            <i className="ph ph-credit-card"></i> {t("payment_methods")}
+                        </Link>
+                        <Link to="/security" className="btn btn-secondary" style={{ padding: '10px' }}>
+                            <i className="ph ph-lock-key"></i> {t("security_settings")}
+                        </Link>
+                    </div>
+                </article>
+
+                <article className="glass-card">
+                    <h3 style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <i className="ph ph-clock-counter-clockwise"></i> {t("my_donations")}
+                    </h3>
+                    {donations.length === 0 && (
+                        <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--text-tertiary)' }}>
+                            <i className="ph ph-receipt" style={{ fontSize: '3rem', marginBottom: '16px', display: 'block' }}></i>
+                            <p>{t("no_donations_yet")}</p>
+                        </div>
+                    )}
+                    {donations.length > 0 && (
+                        <ul className="list-clean" style={{ maxHeight: '300px', overflowY: 'auto', paddingRight: '8px' }}>
+                            {donations.map((donation) => (
+                                <li key={donation._id} className="list-item" style={{ 
+                                    padding: '16px', 
+                                    background: 'rgba(255,255,255,0.02)', 
+                                    borderRadius: '12px', 
+                                    marginBottom: '8px', 
+                                    border: '1px solid var(--glass-border)' 
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <div>
+                                            <strong style={{ display: 'block', marginBottom: '4px' }}>
+                                                {donation.campaign?.title || t("campaigns")}
+                                            </strong>
+                                            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                                                {new Date(donation.createdAt).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                        <div style={{ 
+                                            background: 'var(--accent-gradient)', 
+                                            padding: '6px 12px', 
+                                            borderRadius: '999px', 
+                                            fontWeight: 'bold', 
+                                            color: '#ffffff' 
+                                        }}>
+                                            ${donation.amount}
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </article>
+            </div>
+
+            <article className="glass-card" style={{ marginTop: '24px' }}>
+                <h3 style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <i className="ph ph-plus-circle"></i> {t("create_new_campaign")}
+                </h3>
+                <form className="two-col" onSubmit={handleCreateCampaign}>
+                    <div className="form-grid">
+                        <label>
+                            {t("campaign_title_label")}
+                            <input
+                                name="title"
+                                value={campaignForm.title}
+                                onChange={handleCampaignChange}
+                                required
+                                placeholder={t("campaign_title_placeholder")}
+                            />
+                        </label>
+                        <label>
+                            {t("goal_amount_label")}
+                            <div style={{ position: 'relative' }}>
+                                <i className="ph ph-currency-dollar" style={{ 
+                                    position: 'absolute', 
+                                    left: '16px', 
+                                    top: '50%', 
+                                    transform: 'translateY(-50%)', 
+                                    color: 'var(--text-secondary)' 
+                                }}></i>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    name="goalAmount"
+                                    value={campaignForm.goalAmount}
+                                    onChange={handleCampaignChange}
+                                    style={{ paddingLeft: '40px' }}
+                                    required
+                                />
+                            </div>
+                        </label>
+                        <label>
+                            {t("category_label")}
+                            <div style={{ position: 'relative' }}>
+                                <i className="ph ph-tag" style={{ 
+                                    position: 'absolute', 
+                                    left: '16px', 
+                                    top: '50%', 
+                                    transform: 'translateY(-50%)', 
+                                    color: 'var(--text-secondary)' 
+                                }}></i>
+                                <select
+                                    name="category"
+                                    value={campaignForm.category}
+                                    onChange={handleCampaignChange}
+                                    style={{ paddingLeft: '40px' }}
+                                    required
+                                >
+                                    <option value="Food">{t("cat_food")}</option>
+                                    <option value="Medical">{t("cat_medical")}</option>
+                                    <option value="Education">{t("cat_education")}</option>
+                                    <option value="Disaster">{t("cat_disaster")}</option>
+                                </select>
+                            </div>
+                        </label>
+                    </div>
+                    <div className="form-grid">
+                        <label>
+                            {t("request_desc_label")}
+                            <textarea
+                                rows="4"
+                                name="description"
+                                value={campaignForm.description}
+                                onChange={handleCampaignChange}
+                                placeholder={t("campaign_desc_placeholder")}
+                                required
+                            />
+                        </label>
+                        <label>
+                            {t("campaign_image_label")}
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    ref={fileInputRef}
+                                    style={{ flex: 1 }}
+                                />
+                                {uploading && (
+                                    <div style={{ display: 'flex', alignItems: 'center', color: 'var(--cyan)' }}>
+                                        <i className="ph ph-spinner-gap ph-spin"></i> {t("uploading")}
+                                    </div>
+                                )}
+                            </div>
+                            {campaignForm.imageUrl && !uploading && (
+                                <div style={{ 
+                                    marginTop: '12px', 
+                                    borderRadius: '12px', 
+                                    overflow: 'hidden', 
+                                    height: '100px', 
+                                    width: '100%', 
+                                    border: '1px solid var(--glass-border)' 
+                                }}>
+                                    <img 
+                                        src={campaignForm.imageUrl} 
+                                        alt="Preview" 
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                    />
+                                </div>
+                            )}
+                        </label>
+                                                
+                        <div style={{ marginTop: 'auto', paddingTop: '16px' }}>
+                            <button className="btn" type="submit" disabled={loading || uploading} style={{ width: '100%' }}>
+                                {loading ? t("publishing") : (
+                                    <>
+                                        <i className="ph ph-rocket-launch"></i> {t("publish_campaign_btn")}
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                {notice && (
+                    <div style={{ 
+                        marginTop: '24px', 
+                        padding: '12px', 
+                        background: 'rgba(16, 185, 129, 0.1)', 
+                        color: 'var(--success)', 
+                        borderRadius: '8px', 
+                        border: '1px solid rgba(16, 185, 129, 0.2)', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '8px' 
+                    }}>
+                        <i className="ph ph-check-circle"></i> {notice}
+                    </div>
+                )}
+                {createError && (
+                    <div style={{ 
+                        marginTop: '24px', 
+                        padding: '12px', 
+                        background: 'rgba(239, 68, 68, 0.1)', 
+                        color: 'var(--error)', 
+                        borderRadius: '8px', 
+                        border: '1px solid rgba(239, 68, 68, 0.2)', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '8px' 
+                    }}>
+                        <i className="ph ph-warning-circle"></i> {createError}
+                    </div>
+                )}
+            </article>
+        </section>
+    );
+}

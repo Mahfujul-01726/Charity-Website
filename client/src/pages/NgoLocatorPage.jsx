@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
+import { useTranslation } from "../context/LanguageContext";
 
 import "leaflet/dist/leaflet.css";
 
@@ -26,6 +27,7 @@ function MapController({ center, zoom }) {
 
 export default function NgoLocatorPage() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const defaultCenter = [34.0522, -118.2437];
     const [center, setCenter] = useState(defaultCenter);
     const [searchQuery, setSearchQuery] = useState("");
@@ -46,7 +48,7 @@ export default function NgoLocatorPage() {
 
     const handleLocateMe = () => {
         if (!navigator.geolocation) {
-            alert("Geolocation is not supported by your browser");
+            alert(t("geolocation_not_supported"));
             return;
         }
 
@@ -58,7 +60,7 @@ export default function NgoLocatorPage() {
                 setLoadingLoc(false);
             },
             () => {
-                alert("Unable to retrieve your location");
+                alert(t("geolocation_failed"));
                 setLoadingLoc(false);
             }
         );
@@ -74,10 +76,10 @@ export default function NgoLocatorPage() {
         <section className="container section">
             <div style={{ textAlign: "center", marginBottom: "40px" }}>
                 <h2>
-                    <i className="ph ph-map-pin-line"></i> Global NGO Locator
+                    <i className="ph ph-map-pin-line"></i> {t("global_ngo_locator_title")}
                 </h2>
                 <p style={{ color: "var(--text-secondary)" }}>
-                    Find and connect with verified charitable organizations in your area.
+                    {t("global_ngo_locator_subtitle")}
                 </p>
             </div>
 
@@ -99,7 +101,7 @@ export default function NgoLocatorPage() {
                                 }}
                             ></i>
                             <input
-                                placeholder="Search NGOs by name or cause..."
+                                placeholder={t("search_ngos_placeholder")}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 style={{ paddingLeft: "40px", margin: 0 }}
@@ -110,7 +112,7 @@ export default function NgoLocatorPage() {
                             className="btn btn-secondary"
                             onClick={handleLocateMe}
                             disabled={loadingLoc}
-                            title="Find My Location"
+                            title={t("find_ngos")}
                         >
                             {loadingLoc ? (
                                 <i className="ph ph-spinner-gap ph-spin"></i>
@@ -122,9 +124,9 @@ export default function NgoLocatorPage() {
 
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <h3 style={{ margin: 0 }}>
-                            <i className="ph ph-buildings"></i> Nearby NGOs
+                            <i className="ph ph-buildings"></i> {t("nearby_ngos_title")}
                         </h3>
-                        <span className="chip">{filteredNgos.length} Found</span>
+                        <span className="chip">{filteredNgos.length} {t("ngos_found_suffix")}</span>
                     </div>
 
                     <ul
@@ -202,7 +204,7 @@ export default function NgoLocatorPage() {
                                             gap: "4px",
                                         }}
                                     >
-                                        <i className="ph ph-map-pin"></i> {ngo.distance}
+                                        <i className="ph ph-map-pin"></i> {ngo.distance} {t("miles_away")}
                                     </span>
                                 </div>
                             </li>
@@ -214,7 +216,7 @@ export default function NgoLocatorPage() {
                                     className="ph ph-magnifying-glass-minus"
                                     style={{ fontSize: "3rem", marginBottom: "16px", display: "block" }}
                                 ></i>
-                                <p>No NGOs match your search.</p>
+                                <p>{t("no_ngos_match")}</p>
                             </div>
                         )}
                     </ul>
@@ -264,7 +266,7 @@ export default function NgoLocatorPage() {
                                             }}
                                             onClick={() => navigate(`/contact?subject=Contacting ${encodeURIComponent(ngo.name)}`)}
                                         >
-                                            Contact NGO
+                                            {t("contact_ngo_btn")}
                                         </button>
                                     </div>
                                 </Popup>

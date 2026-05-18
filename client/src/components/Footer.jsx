@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "../context/LanguageContext";
 
 export default function Footer() {
+    const { t } = useTranslation();
     const [email, setEmail] = useState("");
     const [subState, setSubState] = useState("idle"); // idle, loading, success, error
     const [errorMessage, setErrorMessage] = useState("");
@@ -30,12 +32,12 @@ export default function Footer() {
         e.preventDefault();
         if (!email) {
             setSubState("error");
-            setErrorMessage("Please enter an email address.");
+            setErrorMessage(t("sub_error_empty"));
             return;
         }
         if (!/\S+@\S+\.\S+/.test(email)) {
             setSubState("error");
-            setErrorMessage("Please enter a valid email address.");
+            setErrorMessage(t("sub_error_invalid"));
             return;
         }
 
@@ -64,30 +66,30 @@ export default function Footer() {
             <div className="container footer-top-row">
                 <div className="footer-intro">
                     <Link to="/" className="brand footer-logo">
-                        <i className="ph-fill ph-heart-beat pulse-icon"></i> CHARITY.
+                        <i className="ph-fill ph-heart-beat pulse-icon"></i> {t("brand_name")}.
                     </Link>
                     <p className="footer-desc">
-                        Empowering global communities by shifting the paradigm of donation tracing with absolute cryptographic transparency.
+                        {t("footer_desc")}
                     </p>
                     
                     {/* Live blockchain ticker / platform status */}
                     <div className="platform-status">
                         <span className="pulse-dot"></span>
-                        <span className="status-text">Blockchain Tracing Verified &amp; Secured</span>
+                        <span className="status-text">{t("blockchain_status")}</span>
                     </div>
                 </div>
 
                 {/* Newsletter Subscription Area */}
                 <div className="footer-newsletter">
-                    <h4>Join the Movement</h4>
-                    <p>Receive bi-weekly updates on campaigns, transparent tracing, and community impact.</p>
+                    <h4>{t("join_movement")}</h4>
+                    <p>{t("newsletter_subtitle")}</p>
                     
                     <form onSubmit={handleSubscribe} className={`newsletter-form state-${subState}`}>
                         <div className="input-group">
                             <i className="ph ph-envelope input-icon"></i>
                             <input 
                                 type="email" 
-                                placeholder="Enter your email address" 
+                                placeholder={t("email_placeholder")} 
                                 value={email}
                                 onChange={(e) => {
                                     setEmail(e.target.value);
@@ -103,7 +105,7 @@ export default function Footer() {
                             >
                                 {subState === "idle" && (
                                     <>
-                                        <span>Subscribe</span>
+                                        <span>{t("subscribe")}</span>
                                         <i className="ph ph-paper-plane-tilt btn-icon"></i>
                                     </>
                                 )}
@@ -125,7 +127,7 @@ export default function Footer() {
                         )}
                         {subState === "success" && (
                             <p className="subscription-message success-msg">
-                                <i className="ph ph-check-circle"></i> Welcome to our transparent giving network!
+                                <i className="ph ph-check-circle"></i> {t("sub_success")}
                             </p>
                         )}
                     </form>
@@ -138,58 +140,58 @@ export default function Footer() {
                     <div className="stat-icon"><i className="ph-fill ph-heart"></i></div>
                     <div className="stat-details">
                         <span className="stat-number">{stats.heartsBeat.toLocaleString()}+</span>
-                        <span className="stat-label">Hearts Beat / Active Donors</span>
+                        <span className="stat-label">{t("active_donors")}</span>
                     </div>
                 </div>
                 <div className="stat-card">
                     <div className="stat-icon"><i className="ph-fill ph-coins"></i></div>
                     <div className="stat-details">
                         <span className="stat-number">${stats.amountRaised.toLocaleString()}</span>
-                        <span className="stat-label">Total Funds Distributed Safely</span>
+                        <span className="stat-label">{t("total_funds_distributed")}</span>
                     </div>
                 </div>
                 <div className="stat-card">
                     <div className="stat-icon"><i className="ph-fill ph-handshake"></i></div>
                     <div className="stat-details">
-                        <span className="stat-number">{stats.activeNGOs}+ Verified NGOs</span>
-                        <span className="stat-label">Global Support Networks</span>
+                        <span className="stat-number">{t("verified_ngos_count", { count: stats.activeNGOs })}</span>
+                        <span className="stat-label">{t("global_networks")}</span>
                     </div>
                 </div>
             </div>
 
             <div className="container footer-grid">
                 <div className="footer-links-col">
-                    <h4>Explore Campaigns</h4>
+                    <h4>{t("explore_campaigns_footer")}</h4>
                     <div className="links-list">
                         <Link to="/campaigns" className="footer-link">
-                            <i className="ph ph-caret-right"></i> Active Campaigns
+                            <i className="ph ph-caret-right"></i> {t("active_campaigns_footer")}
                         </Link>
                         <Link to="/categories" className="footer-link">
-                            <i className="ph ph-caret-right"></i> All Categories
+                            <i className="ph ph-caret-right"></i> {t("all_categories_footer")}
                         </Link>
                         <Link to="/ngo-locator" className="footer-link">
-                            <i className="ph ph-caret-right"></i> Verified NGO Locator
+                            <i className="ph ph-caret-right"></i> {t("verified_ngo_locator")}
                         </Link>
                     </div>
                 </div>
                 
                 <div className="footer-links-col">
-                    <h4>Platform &amp; Legal</h4>
+                    <h4>{t("platform_legal")}</h4>
                     <div className="links-list">
                         <Link to="/contact" className="footer-link">
-                            <i className="ph ph-caret-right"></i> Contact &amp; Support
+                            <i className="ph ph-caret-right"></i> {t("contact_support_footer")}
                         </Link>
                         <Link to="/help" className="footer-link">
-                            <i className="ph ph-caret-right"></i> Help Center &amp; FAQ
+                            <i className="ph ph-caret-right"></i> {t("help_center_faq")}
                         </Link>
                         <Link to="/security" className="footer-link">
-                            <i className="ph ph-caret-right"></i> Cryptographic Security
+                            <i className="ph ph-caret-right"></i> {t("crypto_security")}
                         </Link>
                     </div>
                 </div>
 
                 <div className="footer-links-col connect-col">
-                    <h4>Connect Socially</h4>
+                    <h4>{t("connect_socially")}</h4>
                     <div className="social-links-grid">
                         <a href="#" target="_blank" rel="noreferrer" title="Twitter/X" className="social-pill twitter">
                             <i className="ph-fill ph-twitter-logo"></i>
@@ -213,16 +215,16 @@ export default function Footer() {
 
             <div className="container footer-bottom">
                 <div className="footer-bottom-left">
-                    <p>&copy; {new Date().getFullYear()} CHARITY Platform. Built with absolute transparency &amp; trust.</p>
+                    <p>&copy; {new Date().getFullYear()} {t("footer_copy")}</p>
                 </div>
                 <div className="footer-bottom-right">
                     <div className="footer-legal-links">
-                        <Link to="/#">Privacy &amp; Security</Link>
-                        <Link to="/#">Terms &amp; User Agreement</Link>
+                        <Link to="/#">{t("privacy_security")}</Link>
+                        <Link to="/#">{t("terms_user_agreement")}</Link>
                     </div>
                     {/* Dynamic Smooth scroll to top button inside footer */}
-                    <button onClick={scrollToTop} className="scroll-top-btn" title="Back to top">
-                        <span>Back To Top</span>
+                    <button onClick={scrollToTop} className="scroll-top-btn" title={t("back_to_top")}>
+                        <span>{t("back_to_top")}</span>
                         <i className="ph ph-arrow-up"></i>
                     </button>
                 </div>
