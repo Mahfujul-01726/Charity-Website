@@ -181,7 +181,24 @@
     }
 
     .hero {
-        padding: 40px 20px;
+        padding: 40px 16px !important;
+        overflow: visible !important;
+    }
+
+    .hero h1 {
+        font-size: clamp(1.8rem, 7vw, 2.5rem) !important;
+        line-height: 1.2 !important;
+        margin-bottom: 16px !important;
+    }
+
+    .hero p {
+        font-size: 1rem !important;
+        margin-bottom: 24px !important;
+        line-height: 1.5 !important;
+    }
+
+    .container {
+        width: min(1200px, 92%) !important;
     }
 
     /* Global padding reduction on mobile for cards */

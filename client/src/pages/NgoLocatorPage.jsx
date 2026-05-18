@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
@@ -202,7 +202,7 @@ export default function NgoLocatorPage() {
                                             gap: "4px",
                                         }}
                                     >
-                                        <i className="ph ph-map-pin"></i> {ngo.distance} away
+                                        <i className="ph ph-map-pin"></i> {ngo.distance}
                                     </span>
                                 </div>
                             </li>
