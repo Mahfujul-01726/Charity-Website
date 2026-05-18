@@ -28,6 +28,14 @@ function MapController({ center, zoom }) {
 export default function NgoLocatorPage() {
     const navigate = useNavigate();
     const { t } = useTranslation();
+
+    const getTranslatedNgoCategory = (category) => {
+        const slug = (category || "").toLowerCase().replace(/\s+/g, "_");
+        const key = `cat_${slug}`;
+        const translated = t(key);
+        return translated === key ? category : translated;
+    };
+
     const defaultCenter = [34.0522, -118.2437];
     const [center, setCenter] = useState(defaultCenter);
     const [searchQuery, setSearchQuery] = useState("");
@@ -193,7 +201,7 @@ export default function NgoLocatorPage() {
                                             gap: "4px",
                                         }}
                                     >
-                                        <i className="ph ph-tag"></i> {ngo.category}
+                                        <i className="ph ph-tag"></i> {getTranslatedNgoCategory(ngo.category)}
                                     </span>
                                     <span
                                         style={{
@@ -204,7 +212,7 @@ export default function NgoLocatorPage() {
                                             gap: "4px",
                                         }}
                                     >
-                                        <i className="ph ph-map-pin"></i> {ngo.distance} {t("miles_away")}
+                                        <i className="ph ph-map-pin"></i> {ngo.distance.replace("miles away", "").trim()} {t("miles_away")}
                                     </span>
                                 </div>
                             </li>
@@ -254,7 +262,7 @@ export default function NgoLocatorPage() {
                                             {ngo.name}
                                         </strong>
                                         <span style={{ display: "block", marginBottom: "8px", color: "#6b7280" }}>
-                                            {ngo.category}
+                                            {getTranslatedNgoCategory(ngo.category)}
                                         </span>
                                         <button
                                             className="btn"

@@ -182,8 +182,75 @@ a {
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-bottom-color: rgba(255, 255, 255, 0.03);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease;
+
+    /* Responsive Space Design Tokens - Desktop Fluid Layout */
+    --nav-padding: clamp(16px, 2vw, 24px);
+    --nav-menu-gap: clamp(16px, 2.5vw, 28px);
+    --nav-links-gap: clamp(6px, 0.8vw, 10px);
+    --nav-auth-gap: clamp(8px, 1.2vw, 12px);
+    --nav-link-padding: 8px clamp(6px, 0.8vw, 10px);
+    --nav-btn-padding: 0 clamp(10px, 1.2vw, 16px);
+    --nav-btn-height: 42px;
+    --nav-btn-font-size: 0.95rem;
+}
+
+@media (max-width: 1200px) {
+    .nav-shell {
+        --nav-padding: clamp(14px, 1.8vw, 20px);
+        --nav-menu-gap: clamp(12px, 2vw, 20px);
+        --nav-links-gap: clamp(4px, 0.6vw, 8px);
+        --nav-auth-gap: clamp(6px, 1vw, 10px);
+        --nav-link-padding: 6px clamp(4px, 0.6vw, 8px);
+        --nav-btn-padding: 0 clamp(8px, 1vw, 12px);
+        --nav-btn-height: 38px;
+        --nav-btn-font-size: 0.9rem;
+    }
+    
+    .nav-links a {
+        font-size: 0.9rem;
+    }
+    
+    .lang-toggle.desktop-only span {
+        display: none;
+    }
+    
+    .lang-toggle.desktop-only {
+        padding: 0;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        justify-content: center;
+    }
+    
+    .theme-toggle.desktop-only {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .nav-shell {
+        --nav-padding: 12px;
+        --nav-menu-gap: 12px;
+        --nav-links-gap: 4px;
+        --nav-auth-gap: 6px;
+        --nav-link-padding: 6px 6px;
+        --nav-btn-padding: 0 10px;
+    }
+    
+    .nav-links a {
+        font-size: 0.85rem;
+    }
+    
+    .nav-links a i {
+        display: none;
+    }
+    
+    .nav-auth .btn i, .nav-auth .btn-outline i {
+        display: none;
+    }
 }
 
 .nav-shell.nav-scrolled {
@@ -220,7 +287,7 @@ a {
     align-items: center;
     justify-content: space-between;
     min-height: 70px;
-    padding: 0 32px;
+    padding: 0 var(--nav-padding);
     gap: 16px;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -238,6 +305,7 @@ a {
     align-items: center;
     gap: 10px;
     color: var(--text-primary);
+    flex-shrink: 0;
 }
 
 .brand-text {
@@ -280,14 +348,14 @@ a {
     align-items: center;
     justify-content: flex-end;
     flex: 1;
-    margin-left: 48px;
-    gap: 40px;
+    margin-left: clamp(16px, 3vw, 48px);
+    gap: var(--nav-menu-gap);
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--nav-links-gap);
 }
 
 .nav-links a {
@@ -295,7 +363,7 @@ a {
     font-weight: 500;
     color: var(--text-secondary);
     position: relative;
-    padding: 8px 12px;
+    padding: var(--nav-link-padding);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -358,23 +426,25 @@ a {
 .nav-auth {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: var(--nav-auth-gap);
+    flex-shrink: 0;
 }
 
 .nav-shell .btn, .nav-shell .btn-outline {
-    padding: 0 22px;
-    font-size: 0.95rem;
-    height: 42px;
+    padding: var(--nav-btn-padding);
+    font-size: var(--nav-btn-font-size, 0.95rem);
+    height: var(--nav-btn-height, 42px);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Theme Toggle Button Style */
 .theme-toggle {
-    width: 42px;
-    height: 42px;
+    width: var(--nav-btn-height, 42px);
+    height: var(--nav-btn-height, 42px);
     border-radius: 50%;
     background: var(--social-btn-bg);
     border: 1px solid var(--glass-border);
@@ -397,7 +467,7 @@ a {
 
 /* Language Toggle Button Style */
 .lang-toggle {
-    height: 42px;
+    height: var(--nav-btn-height, 42px);
     border-radius: 999px;
     background: var(--social-btn-bg);
     border: 1px solid var(--glass-border);
@@ -430,15 +500,11 @@ a {
 
 /* Navigation-specific Sleek Buttons */
 .nav-auth .btn {
-    padding: 10px 20px;
-    font-size: 0.9rem;
     border-radius: 999px;
     box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
 }
 
 .nav-auth .btn-outline {
-    padding: 10px 20px;
-    font-size: 0.9rem;
     border-radius: 999px;
 }
 

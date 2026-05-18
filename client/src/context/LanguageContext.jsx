@@ -264,7 +264,49 @@ const translations = {
 
         // Payments Page
         default_payment_label: "Default",
-        set_default_btn: "Set Default"
+        set_default_btn: "Set Default",
+
+        // Additional / Missing Keys
+        subscribe: "Subscribe",
+        donation_history: "Donation History",
+        campaign: "Campaign",
+        amount: "Amount",
+        status: "Status",
+        status_pending: "Pending",
+        status_approved: "Approved",
+        status_rejected: "Rejected",
+        status_completed: "Completed",
+        transaction: "Transaction ID",
+        all_donation_categories: "All Donation Categories",
+        faq_q1: "How do I make a donation?",
+        faq_a1: "Choose a category or campaign and complete the form.",
+        faq_q2: "Is payment information secure?",
+        faq_a2: "Yes, all payment data should be processed securely on production gateways.",
+        faq_q3: "How can I track my donations?",
+        faq_a3: "Open Donation History from your profile area.",
+        page_not_found: "Page Not Found",
+        page_not_found_desc: "The page you are looking for does not exist.",
+        go_home: "Go Home",
+        notif_title_success: "Donation Successful",
+        notif_msg_success: "Your donation of $50 to Clean Water Initiative was processed.",
+        notif_time_success: "2 hours ago",
+        notif_title_new: "New Campaign",
+        notif_msg_new: "Emergency Relief Fund needs your support right now.",
+        notif_time_new: "5 hours ago",
+        notif_title_badge: "Achievement Unlocked",
+        notif_msg_badge: "You earned the Regular Donor badge with 5 donations.",
+        notif_time_badge: "1 day ago",
+        cat_animal_welfare: "Animal Welfare",
+        cat_community_support: "Community Support",
+
+        // Search Page Keys
+        discover_campaigns_causes: "Discover Campaigns & Causes",
+        search_input_placeholder: "Search for 'Medical', 'Education', 'Disaster Relief'...",
+        popular_searches: "Popular Searches:",
+        category_results: "Category Results",
+        no_categories_found: "No matching categories found.",
+        campaign_results: "Campaign Results",
+        no_campaigns_found: "No matching campaigns found. Try adjusting your search query."
     },
     bn: {
         // Navbar
@@ -527,7 +569,49 @@ const translations = {
 
         // Payments Page
         default_payment_label: "ডিফল্ট",
-        set_default_btn: "ডিফল্ট নির্ধারণ করুন"
+        set_default_btn: "ডিফল্ট নির্ধারণ করুন",
+
+        // Additional / Missing Keys
+        subscribe: "গ্রাহক হোন",
+        donation_history: "অনুদানের ইতিহাস",
+        campaign: "ক্যাম্পেইন",
+        amount: "পরিমাণ",
+        status: "অবস্থা",
+        status_pending: "অপেক্ষমান",
+        status_approved: "অনুমোদিত",
+        status_rejected: "প্রত্যাখ্যাত",
+        status_completed: "সম্পন্ন",
+        transaction: "লেনদেন আইডি",
+        all_donation_categories: "সব অনুদানের ক্যাটাগরি",
+        faq_q1: "আমি কিভাবে অনুদান দেব?",
+        faq_a1: "একটি বিভাগ বা ক্যাম্পেইন বেছে নিন এবং ফর্মটি পূরণ করুন।",
+        faq_q2: "পেমেন্ট সংক্রান্ত তথ্য কি নিরাপদ?",
+        faq_a2: "হ্যাঁ, সমস্ত পেমেন্ট ডেটা প্রোডাকশন গেটওয়েতে সুরক্ষিতভাবে প্রক্রিয়া করা হয়।",
+        faq_q3: "আমি কিভাবে আমার অনুদান ট্র্যাক করতে পারি?",
+        faq_a3: "আপনার প্রোফাইল এলাকা থেকে অনুদানের ইতিহাস খুলুন।",
+        page_not_found: "পৃষ্ঠাটি পাওয়া যায়নি",
+        page_not_found_desc: "আপনি যে পৃষ্ঠাটি খুঁজছেন তার কোনো অস্তিত্ব নেই।",
+        go_home: "হোমে ফিরে যান",
+        notif_title_success: "অনুদান সফল হয়েছে",
+        notif_msg_success: "ক্লিন ওয়াটার ইনিশিয়েটিভে আপনার ৫০ ডলারের অনুদান সফলভাবে সম্পন্ন হয়েছে।",
+        notif_time_success: "২ ঘণ্টা আগে",
+        notif_title_new: "নতুন ক্যাম্পেইন",
+        notif_msg_new: "জরুরী ত্রাণ তহবিলের জন্য এখনই আপনার সহায়তা প্রয়োজন।",
+        notif_time_new: "৫ ঘণ্টা আগে",
+        notif_title_badge: "অর্জন আনলক হয়েছে",
+        notif_msg_badge: "৫টি অনুদান দিয়ে আপনি নিয়মিত দাতার ব্যাজ অর্জন করেছেন।",
+        notif_time_badge: "১ দিন আগে",
+        cat_animal_welfare: "প্রাণী কল্যাণ",
+        cat_community_support: "সামাজিক সহায়তা",
+
+        // Search Page Keys
+        discover_campaigns_causes: "ক্যাম্পেইন এবং সাহায্য খুঁজুন",
+        search_input_placeholder: "যেমন: 'চিকিৎসা', 'শিক্ষা', 'দুর্যোগ ত্রাণ' খুঁজুন...",
+        popular_searches: "জনপ্রিয় অনুসন্ধান সমূহ:",
+        category_results: "ক্যাটাগরি ফলাফল",
+        no_categories_found: "কোনো মেলানো ক্যাটাগরি পাওয়া যায়নি।",
+        campaign_results: "ক্যাম্পেইনের ফলাফল",
+        no_campaigns_found: "কোনো মেলানো ক্যাম্পেইন পাওয়া যায়নি। আপনার অনুসন্ধানের শব্দ পরিবর্তন করে দেখুন।"
     }
 };
 
